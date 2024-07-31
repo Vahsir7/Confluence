@@ -16,20 +16,26 @@ def create_student():
         last_name = request.form['last_name']
         roll_number = request.form['roll_number']
 
-        student = Student(first_name=first_name, last_name=last_name, roll_number=roll_number)
-        
-        course_ids = request.form.getlist('courses')
-        
-        for course_id in course_ids:
-            course = Course.query.get(course_id)
-            if course:
-                enrollment = Enrollment(student=student, course=course)
-                db.session.add(enrollment)
-        
-        db.session.add(student)
-        db.session.commit()
-        
-        return 'Student created successfully'
+        if roll_number in [student.roll_number for student in Student.query.all()]:
+            return '''
+            Roll number already exists
+            <a href="/student/create">Go back</a>
+            '''
+        else:
+            student = Student(first_name=first_name, last_name=last_name, roll_number=roll_number)
+            
+            course_ids = request.form.getlist('courses')
+            
+            for course_id in course_ids:
+                course = Course.query.get(course_id)
+                if course:
+                    enrollment = Enrollment(student=student, course=course)
+                    db.session.add(enrollment)
+            
+            db.session.add(student)
+            db.session.commit()
+            
+        return render_template('home.html', students=Student.query.all())
     
     courses = Course.query.all()
     return render_template('create.html', courses=courses)
