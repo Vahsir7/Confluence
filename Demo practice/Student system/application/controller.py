@@ -39,3 +39,32 @@ def create_student():
     
     courses = Course.query.all()
     return render_template('create.html', courses=courses)
+
+
+@main_bp.route('/student/<int:student_id>/update', methods=['GET', 'POST'])
+def update(student_id):
+    student = Student.query.get_or_404(student_id)
+    courses = Course.query.all()
+    enrolled_course_ids = [enrollment.course_id for enrollment in student.enrollments]
+
+    if request.method == 'POST':
+        student.first_name = request.form['first_name']
+        student.last_name = request.form['last_name']
+        student.roll_number = request.form['roll_number']
+        
+        db.session.query(Enrollment).filter(Enrollment.student_id == student_id).delete()
+
+
+        course_ids = request.form.getlist('courses')
+        student.enrollments.clear()  # Clear current enrollments
+        
+        for course_id in course_ids:
+            course = Course.query.get(course_id)
+            if course:
+                enrollment = Enrollment(student=student, course=course)
+                db.session.add(enrollment)
+        
+        db.session.commit()
+        return render_template('home.html', students=Student.query.all())
+    
+    return render_template('update.html', student=student, courses=courses, enrolled_course_ids=enrolled_course_ids)
