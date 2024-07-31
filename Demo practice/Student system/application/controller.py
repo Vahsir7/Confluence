@@ -83,3 +83,16 @@ def delete(student_id):
     
     return render_template("areyousure.html",student=student)
 
+
+@main_bp.route('/student/<int:student_id>/details', methods=['GET'])
+def details(student_id):
+    student = Student.query.get_or_404(student_id)
+    course_ids = db.session.query(Enrollment.course_id).filter(Enrollment.student_id == student_id).all()
+    courses =[]
+    for course_id in course_ids:
+        course = Course.query.filter(Course.course_id == course_id[0]).first()
+        courses.append(course)
+    
+    return render_template('details.html', student=student, courses=courses)
+
+

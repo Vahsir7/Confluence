@@ -28,7 +28,7 @@
             <td>{{ student.first_name }}</td>
             <td>{{ student.last_name }}</td>
             <td>
-                <a href="/student/{{ student.student_id }}/Details" type="button">Details</a>
+                <a href="{{ url_for('main.details', student_id=student.student_id) }}" type="button">Details</a>
                 <a href="{{ url_for('main.update', student_id=student.student_id) }}" type="button">Update</a>
                 <a href="{{ url_for('main.delete', student_id=student.student_id) }}" type="button">Delete</a>
             </td>    
