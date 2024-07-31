@@ -68,3 +68,18 @@ def update(student_id):
         return render_template('home.html', students=Student.query.all())
     
     return render_template('update.html', student=student, courses=courses, enrolled_course_ids=enrolled_course_ids)
+
+
+@main_bp.route('/student/<int:student_id>/delete', methods=['GET', 'POST'])
+def delete(student_id):
+    student = Student.query.get_or_404(student_id)
+
+    if request.method == 'POST':
+        
+        db.session.query(Enrollment).filter(Enrollment.student_id == student_id).delete()
+        db.session.delete(student)
+        db.session.commit()
+        return render_template('home.html', students=Student.query.all())
+    
+    return render_template("areyousure.html",student=student)
+
