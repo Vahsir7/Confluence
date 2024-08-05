@@ -2,10 +2,49 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width, initial-scale=1.0">
-    <title>Document</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Page</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='dashboard.css') }}">
 </head>
 <body>
-    welcome {{influencer.name}}
+    <div class="container">
+        <header>
+            <span>welcome {{ influencer.username }}</span>
+            <nav>
+                <a href="#">Search</a>
+                <a href="#">Invitations</a>
+                <a href="#">Applications</a>
+                <a href="#">Logout</a>
+            </nav>
+        </header>
+        <div class="content">
+            <aside class="profile">
+                <div class="profile-image">
+                    <img src="{{ url_for('static', filename='uploads/' + influencer.profilePic) }}" alt="{{ influencer.username }}'s Profile Picture">
+                </div>
+                <div class="profile-details">
+                    <hr>
+                    <p style="color:#333;">@{{influencer.username}}</p>
+                    <p style="font-size: 16px;">{{influencer.Fname}} {{influencer.Lname}}</p>
+                    <p>earnings</p>
+                    <p>ratings</p>
+                </div>
+            </aside>
+            <main>
+                <section class="panel applications">
+                    <h2>Applications</h2>
+                    <p>There are no applications to show</p>
+                </section>
+                <section class="panel invitations">
+                    <h2>Invitations</h2>
+                    <p>There are no invitations to show</p>
+                </section>
+                <section class="panel opportunities">
+                    <h2>New Opportunities</h2>
+                    <p>There are no new opportunities to show</p>
+                </section>
+            </main>
+        </div>
+    </div>
 </body>
 </html>
