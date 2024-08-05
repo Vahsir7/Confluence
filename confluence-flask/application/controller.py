@@ -11,22 +11,26 @@ def signin():
     '''
     return render_template('signin.html')
 
-@main_bp.route('/login')
+@main_bp.route('/login', methods=['GET'])
 def login():
-    email = request.form.get('email')
-    password = request.form.get('password')
-    type = request.form.get('type')
+    email = request.args.get('email')
+    password = request.args.get('password')
+    type = request.args.get('type')
     
-    if type =='influencer':
-        influncer = Influencers.query.filter_by(email=email, password=password).first()
-        if influncer:
-            return render_template('influencer_dashboard.html',influncer=influncer)
+    if type == 'influencer':
+        influencer = Influencers.query.filter_by(email=email, password=password).first()
+        print("*************************")
+        print(email,password,type)
+        print(influencer)
+        if influencer:
+            print("rendering influencer dashboard")
+            return render_template('influencer_dashboard.html', influencer=influencer)
         return render_template('signin.html', error='Invalid email or password')
     
     elif type == 'sponsor':
         sponsor = Sponsors.query.filter_by(email=email, password=password).first()
         if sponsor:
-            return render_template('sponsor_dashboard.html',sponsor=sponsor)
+            return render_template('sponsor_dashboard.html', sponsor=sponsor)
         return render_template('signin.html', error='Invalid email or password')
     else:
         return render_template('Welcome admin')

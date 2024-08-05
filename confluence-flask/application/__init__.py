@@ -12,7 +12,7 @@ def create_app():
     
 
     with app.app_context():
-        from .models import Influencers, Sponsors, Campaigns
+        from .models import Influencers, Sponsors
         db.create_all()
     
     # Import the routes to ensure they are registered
