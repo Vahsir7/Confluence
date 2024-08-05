@@ -1,0 +1,13 @@
+html, body {
+    height: 100%;
+    margin: 0;
+}
+body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-image: linear-gradient(rgb(144, 59, 224), rgb(163, 140, 185));
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    width: 100%;
+}
