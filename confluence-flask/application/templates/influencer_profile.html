@@ -5,6 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <title>{{influencer.username}}</title>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const updateButton = document.getElementById("updateBtn");
+            const saveButton = document.getElementById("saveBtn");
+            const formFields = document.querySelectorAll("#profileForm input, #profileForm select");
+
+            updateButton.addEventListener("click", function() {
+                formFields.forEach(field => field.disabled = false);
+                saveButton.disabled = false;
+                updateButton.disabled = true;
+            });
+
+            saveButton.addEventListener("click", function() {
+                document.getElementById("profileForm").submit();
+                saveButton.disabled = true;
+                updateButton.disabled = false;
+            });
+        });
+    </script>
 </head>
 <body>
     <div class="container mt-5">
@@ -12,54 +31,74 @@
             <h1 class="display-4">Profile</h1>
         </div>
         <hr>
-        <form action="/signup/influencer" method="POST" enctype="multipart/form-data">
-            
-            <div class="row">    
+        {% if error %}
+            <div class="alert alert-danger">
+                <strong>{{ error }}</strong>
+            </div>
+            <hr>
+        {% endif %}
+        <form id="profileForm" action="/influencer/{{influencer.username}}/update" method="POST" enctype="multipart/form-data">
+            <div class="row">
+                <div class="col-md-1">
+                    <button type="button" id="updateBtn" class="btn btn-primary">Update</button>
+                </div>
+                <div class="col-md-4">
+                    <button type="button" id="saveBtn" class="btn btn-primary" disabled>Save</button>
+                </div>
+                <div class="col-md-6">
+
+                </div>
+                <div class="col-md-1">
+                    <a href="/influencer/{{influencer.username}}" class="btn btn-primary">Home</a>
+                </div>
+            </div>
+
+            <div class="row">
                 <div class="col-md-4">
                     <label for="Fname">First Name:</label>
-                    <input type="text" class="form-control" id="Fname" name="Fname" value="{{influencer.Fname}}">
+                    <input type="text" class="form-control" id="Fname" name="Fname" value="{{influencer.Fname}}" disabled>
                 </div>
                 <div class="col-md-4">
                     <label for="Mname">Middle Name:</label>
-                    <input type="text" class="form-control" id="Mname" name="Mname" value="{{influencer.Mname}}">
+                    <input type="text" class="form-control" id="Mname" name="Mname" value="{{influencer.Mname}}" disabled>
                 </div>
                 <div class="col-md-4">
                     <label for="Lname">Last Name:</label>
-                    <input type="text" class="form-control" id="Lname" name="Lname" value="{{influencer.Lname}}">
+                    <input type="text" class="form-control" id="Lname" name="Lname" value="{{influencer.Lname}}" disabled>
                 </div>
             </div>
 
             <div class="row">
                 <div class="col-md-4">
                     <label for="username">Username:</label>
-                    <input type="text" class="form-control" id="username" name="username" value="{{influencer.username}}" required>
+                    <input type="text" class="form-control" id="username" name="username" value="{{influencer.username}}" required disabled>
                 </div>
                 <div class="col-md-4">
                     <label for="email">Email:</label>
-                    <input type="email" class="form-control" id="email" name="email" value="{{influencer.email}}" required>
-                </div>    
+                    <input type="email" class="form-control" id="email" name="email" value="{{influencer.email}}" required disabled>
+                </div>
                 <div class="col-md-4">
                     <label for="phone">Phone:</label>
-                    <input type="text" class="form-control" id="phone" name="phone" value="{{influencer.phone}}" required>
+                    <input type="text" class="form-control" id="phone" name="phone" value="{{influencer.phone}}" required disabled>
                 </div>
             </div>
 
             <div class="row">
                 <div class="col-md-4">
                     <label for="address">Address:</label>
-                    <input type="text" class="form-control" id="address" name="address" value="{{influencer.address}}" required>
+                    <input type="text" class="form-control" id="address" name="address" value="{{influencer.address}}" required disabled>
                 </div>
                 <div class="col-md-4">
                     <label for="socialmedia">Social Media Handle:</label>
-                    <input type="text" class="form-control" id="socialmedia" name="socialmedia" value="{{influencer.socialmedia}}" required>
+                    <input type="text" class="form-control" id="socialmedia" name="socialmedia" value="{{influencer.socialmedia}}" required disabled>
                 </div>
                 <div class="col-md-4">
                     <label for="gender" class="form-label">Gender</label><br>
-                    <select class="form-select" id="type" name="gender">
-                        <option value="male" {% if influencer.gender = 'male' %}selected{% endif %}>Male</option>
-                        <option value="female" {% if influencer.gender = 'female' %}selected{% endif %}>Female</option>
-                        <option value="others" {% if influencer.gender = 'others' %}selected{% endif %}>Others</option>
-                        <option value="NA" {% if influencer.gender = 'NA' %}selected{% endif %}>Prefer not to say</option>
+                    <select class="form-select" id="gender" name="gender" disabled>
+                        <option value="male" {% if influencer.gender == 'male' %}selected{% endif %}>Male</option>
+                        <option value="female" {% if influencer.gender == 'female' %}selected{% endif %}>Female</option>
+                        <option value="others" {% if influencer.gender == 'others' %}selected{% endif %}>Others</option>
+                        <option value="NA" {% if influencer.gender == 'NA' %}selected{% endif %}>Prefer not to say</option>
                     </select>
                 </div>
             </div>
@@ -67,7 +106,7 @@
             <div class="row">
                 <div class="col-md-4">
                     <label for="password">Password:</label>
-                    <input type="password" class="form-control" id="password" name="password" value="{{influencer.password}}" required>
+                    <input type="password" class="form-control" id="password" name="password" value="{{influencer.password}}" required disabled>
                 </div>
             </div>
 
@@ -80,17 +119,9 @@
                             <p>Current Profile Picture: {{ influencer.profilePic }}</p>
                         </div>
                     {% endif %}
-                    <input type="file" class="form-control" id="profilePic" name="profilePic">
+                    <input type="file" class="form-control" id="profilePic" name="profilePic" disabled>
                 </div>
             </div>
-            
-            <br>
-            <div class="row">
-                <div class="col-md-4">
-                    <button type="submit" class="btn btn-primary">Sign Up</button>
-                </div>
-            </div>
-            
         </form>
     </div>
 </body>

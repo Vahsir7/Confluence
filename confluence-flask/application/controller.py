@@ -123,4 +123,60 @@ def signup_sponsor():
 def influencer_dashboard(username):
     influencer = Influencers.query.filter_by(username=username).first()
     return render_template('influencer_dashboard.html', influencer=influencer)
-    
+
+#infleuncer profile
+@main_bp.route('/influencer/<username>/profile')
+def influencer_profile(username):
+    influencer = Influencers.query.filter_by(username=username).first()
+    return render_template('influencer_profile.html', influencer=influencer)
+
+@main_bp.route('/influencer/<username>/update', methods=['POST'])
+def influencer_update(username):
+    influencer = Influencers.query.filter_by(username=username).first()
+    filename = influencer.profilePic
+    email = influencer.email
+    if request.method == 'POST':
+        #return request.form
+        Fname = request.form['Fname']
+        Mname = request.form['Mname']
+        Lname = request.form['Lname']
+        newusername = request.form['username']
+        gender = request.form['gender']
+        phone = request.form['phone']
+        address = request.form['address']
+        newemail = request.form['email']
+        socialmedia = request.form['socialmedia']
+        password = request.form['password']
+        profilePic = request.files['profilePic']
+
+        if (newusername in [influencer.username for influencer in Influencers.query.all()]) :
+            if(newusername != username):
+                #print('Username already exists')
+                return render_template('influencer_profile.html', influencer=influencer, error='Username already exists')
+        
+        if (newemail in [influencer.email for influencer in Influencers.query.all()]):
+            if(newemail != email):
+                print('Email already exists')
+                return render_template('influencer_profile.html', influencer=influencer, error='Email already exists')
+        
+        if profilePic.filename != '':
+            filename = username
+            profilePic.save(os.path.join(os.path.abspath(os.path.dirname(__file__)), 'static/uploads', filename))
+
+        
+        db.session.query(Influencers).filter(Influencers.username == username).update({
+            Influencers.Fname: Fname,
+            Influencers.Mname: Mname,
+            Influencers.Lname: Lname,
+            Influencers.gender: gender,
+            Influencers.username: newusername,
+            Influencers.phone: phone,
+            Influencers.address: address,
+            Influencers.email: newemail,
+            Influencers.socialmedia: socialmedia,
+            Influencers.password: password,
+            Influencers.profilePic: filename
+        })
+        db.session.commit()
+        return redirect(f'/influencer/{newusername}/profile')
+    return redirect(f'/influencer/{username}/profile')
