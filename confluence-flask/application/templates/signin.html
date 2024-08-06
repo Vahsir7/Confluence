@@ -1,6 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script type="text/javascript">
+        window.onload = function() {
+            // Get the error message passed from the backend
+            var error = "{{ error|safe }}";
+            if (error) {
+                alert(error);
+            }
+        }
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     

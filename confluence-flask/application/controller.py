@@ -13,6 +13,7 @@ def signin():
     This function renders the signin page
     '''
     return render_template('signin.html')
+    #return redirect('/login')
 
 
 #login page 
@@ -22,33 +23,24 @@ def signin():
 def login():
     email = request.args.get('email')
     password = request.args.get('password')
-    type = request.args.get('type')
+    logintype = request.args.get('type')
     
-    if type == 'influencer':
+    if logintype == 'influencer':
         if '@' in email:
             influencer = InfluencerAccounts.query.filter_by(email=email, password=password).first()
         else:
             influencer = InfluencerAccounts.query.filter_by(username=email, password=password).first()
-        print("*************************")
-        print(email,password,type)
-        print(influencer)
+        #print("*************************")
+        #print(email,password,type)
+        #print(influencer)
         if influencer:
             #print("rendering influencer dashboard")
-            influencer = Influencers.query.filter_by(id=influencer.influencer_id).first()
-            return render_template('influencer_dashboard.html', influencer=influencer )
-        return '''
-        <html>
-            <head>
-                <title>Sign In</title>
-            </head>
-            <body>
-                <h1>Invalid email or password</h1>
-                <a href="/">Go back</a>
-            </body>
-            </html>'''
-        #return render_template('signin.html', error='Invalid email or password')
+            #influencer = Influencers.query.filter_by(id=influencer.influencer_id).first()
+            return redirect(f'/influencer/{influencer.username}')
+        
+        return render_template('signin.html', error='Invalid email or password')
     
-    elif type == 'sponsor':
+    elif logintype == 'sponsor':
         sponsor = Sponsors.query.filter_by(email=email, password=password).first()
         if sponsor:
             return render_template('sponsor_dashboard.html', sponsor=sponsor)
@@ -80,17 +72,16 @@ def signup_influencer():
         profilePic = request.files['profilePic']
 
         if (username in [influencer.username for influencer in Influencers.query.all()]) :
-            return '''
-            {% include 'signup_influencer.html' %}
-            Username already exists
-            <a href="/signup/influencer">Go back</a>
-            '''
+            return render_template('signup_influencer.html', error='Username already exists',
+                                   Fname=Fname, Mname=Mname, Lname=Lname, username=username,
+                                   gender=gender, phone=phone, address=address, email=email,
+                                   socialmedia=socialmedia)
+        
         elif (email in [influencer.email for influencer in Influencers.query.all()]):
-            return '''
-            {% include 'signup_influencer.html' %}
-            Email-id already exists
-            <a href="/signup/influencer">Go back</a>
-            '''
+            return render_template('signup_influencer.html', error='Email already exists'
+                                   ,Fname=Fname, Mname=Mname, Lname=Lname, username=username,
+                                   gender=gender, phone=phone, address=address, email=email,
+                                   socialmedia=socialmedia)
 
         else:
             if profilePic.filename != '':
@@ -126,3 +117,10 @@ def signup_sponsor():
         db.session.commit()
         return render_template('signin.html')
     return render_template('signup_sponsor.html')
+
+# influencer dashboard
+@main_bp.route('/influencer/<username>')
+def influencer_dashboard(username):
+    influencer = Influencers.query.filter_by(username=username).first()
+    return render_template('influencer_dashboard.html', influencer=influencer)
+    

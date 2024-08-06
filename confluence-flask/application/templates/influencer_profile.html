@@ -4,67 +4,62 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <title>Signup as Influencer</title>
+    <title>{{influencer.username}}</title>
 </head>
 <body>
     <div class="container mt-5">
         <div class="jumbotron-fluid">
-            <h1 class="display-4">Sign Up as Influencer</h1>
+            <h1 class="display-4">Profile</h1>
         </div>
         <hr>
-        {% if error %}
-            <div class="alert alert-danger">
-                <strong>{{ error }}</strong>
-            </div>
-            <hr>
-        {% endif %}
         <form action="/signup/influencer" method="POST" enctype="multipart/form-data">
+            
             <div class="row">    
                 <div class="col-md-4">
                     <label for="Fname">First Name:</label>
-                    <input type="text" class="form-control" id="Fname" name="Fname" value="{{ Fname or '' }}" required>
+                    <input type="text" class="form-control" id="Fname" name="Fname" value="{{influencer.Fname}}">
                 </div>
                 <div class="col-md-4">
                     <label for="Mname">Middle Name:</label>
-                    <input type="text" class="form-control" id="Mname" name="Mname" value="{{ Mname or '' }}">
+                    <input type="text" class="form-control" id="Mname" name="Mname" value="{{influencer.Mname}}">
                 </div>
                 <div class="col-md-4">
                     <label for="Lname">Last Name:</label>
-                    <input type="text" class="form-control" id="Lname" name="Lname" value="{{ Lname or '' }}">
+                    <input type="text" class="form-control" id="Lname" name="Lname" value="{{influencer.Lname}}">
                 </div>
             </div>
 
             <div class="row">
                 <div class="col-md-4">
                     <label for="username">Username:</label>
-                    <input type="text" class="form-control" id="username" name="username" value="{{ username or '' }}" required>
+                    <input type="text" class="form-control" id="username" name="username" value="{{influencer.username}}" required>
                 </div>
                 <div class="col-md-4">
                     <label for="email">Email:</label>
-                    <input type="email" class="form-control" id="email" name="email" value="{{ email or '' }}" required>
+                    <input type="email" class="form-control" id="email" name="email" value="{{influencer.email}}" required>
                 </div>    
                 <div class="col-md-4">
                     <label for="phone">Phone:</label>
-                    <input type="text" class="form-control" id="phone" name="phone" value="{{ phone or '' }}" required>
+                    <input type="text" class="form-control" id="phone" name="phone" value="{{influencer.phone}}" required>
                 </div>
             </div>
 
             <div class="row">
                 <div class="col-md-4">
                     <label for="address">Address:</label>
-                    <input type="text" class="form-control" id="address" name="address" value="{{ address or '' }}" required>
+                    <input type="text" class="form-control" id="address" name="address" value="{{influencer.address}}" required>
                 </div>
                 <div class="col-md-4">
                     <label for="socialmedia">Social Media Handle:</label>
-                    <input type="text" class="form-control" id="socialmedia" name="socialmedia" value="{{ socialmedia or '' }}" required>
+                    <input type="text" class="form-control" id="socialmedia" name="socialmedia" value="{{influencer.socialmedia}}" required>
                 </div>
                 <div class="col-md-4">
                     <label for="gender" class="form-label">Gender</label><br>
-                    <select class="form-select" id="gender" name="gender">
-                        <option value="male" {% if gender == 'male' %}selected{% endif %}>Male</option>
-                        <option value="female" {% if gender == 'female' %}selected{% endif %}>Female</option>
-                        <option value="others" {% if gender == 'others' %}selected{% endif %}>Others</option>
-                        <option value="NA" {% if gender == 'NA' %}selected{% endif %}>Prefer not to say</option>
+                    <select class="form-select" id="type" name="gender">
+                        <option value="male" {% if influencer.gender = 'male' %}selected{% endif %}>Male</option>
+                        <option value="female" {% if influencer.gender = 'female' %}selected{% endif %}>Female</option>
+                        <option value="others" {% if influencer.gender = 'others' %}selected{% endif %}>Others</option>
+                        <option value="NA" {% if influencer.gender = 'NA' %}selected{% endif %}>Prefer not to say</option>
                     </select>
                 </div>
             </div>
@@ -72,22 +67,30 @@
             <div class="row">
                 <div class="col-md-4">
                     <label for="password">Password:</label>
-                    <input type="password" class="form-control" id="password" name="password" required>
+                    <input type="password" class="form-control" id="password" name="password" value="{{influencer.password}}" required>
                 </div>
             </div>
 
             <div class="row">
                 <div class="col-md-4">
                     <label for="profilePic">Profile Picture:</label>
+                    {% if influencer.profilePic %}
+                        <div>
+                            <img src="{{ url_for('static', filename='uploads/' + influencer.profilePic) }}" alt="Current Profile Picture" style="max-width: 100px; max-height: 100px;">
+                            <p>Current Profile Picture: {{ influencer.profilePic }}</p>
+                        </div>
+                    {% endif %}
                     <input type="file" class="form-control" id="profilePic" name="profilePic">
                 </div>
             </div>
+            
             <br>
             <div class="row">
                 <div class="col-md-4">
                     <button type="submit" class="btn btn-primary">Sign Up</button>
                 </div>
             </div>
+            
         </form>
     </div>
 </body>
