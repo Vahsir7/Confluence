@@ -1,5 +1,4 @@
 from . import db
-
 class Influencers(db.Model):
     __tablename__ = 'influencers'
 
@@ -15,6 +14,8 @@ class Influencers(db.Model):
     socialmedia = db.Column(db.String(100), nullable=False)
     profilePic = db.Column(db.String, nullable=True)
     password = db.Column(db.String(100), nullable=False)
+    # Define backref here
+    accounts = db.relationship('InfluencerAccounts', backref='influencer', cascade="all, delete-orphan")
 
 class InfluencerAccounts(db.Model):
     __tablename__ = 'Influencer_accounts'
@@ -23,8 +24,7 @@ class InfluencerAccounts(db.Model):
     email = db.Column(db.String(100), nullable=False)
     username = db.Column(db.String(100), nullable=False)
     password = db.Column(db.String(100), nullable=False)
-    #relationship to the Influencers table
-    influencer = db.relationship('Influencers', backref=db.backref('accounts', lazy=True))
+    # Do not define backref here
     
 class Sponsors(db.Model):
     __tablename__ = 'sponsors'

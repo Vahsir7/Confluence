@@ -86,15 +86,17 @@ def signup_influencer():
         else:
             if profilePic.filename != '':
                 filename = username
+                filename += '.jpg'
+                profilePic.save(os.path.join(os.path.abspath(os.path.dirname(__file__)), 'static/uploads', filename))
             else:
                 if gender == 'male':
-                    filename = 'male'
+                    filename = 'male.jpg'
                 elif gender == 'female':
-                    filename = 'female'
+                    filename = 'female.jpg'
                 else:
-                    filename = 'neutral'
-            filename += '.jpg'
-            profilePic.save(os.path.join(os.path.abspath(os.path.dirname(__file__)), 'static/uploads', filename))
+                    filename = 'neutral.jpg'
+            
+            
 
             influencer = Influencers(Fname=Fname,Mname=Mname,Lname=Lname,username=username,gender=gender,phone=phone,address=address,email=email,socialmedia=socialmedia,password=password,profilePic=filename)
             account = InfluencerAccounts(email=email,username=username,password=password,influencer=influencer)
@@ -180,3 +182,20 @@ def influencer_update(username):
         db.session.commit()
         return redirect(f'/influencer/{newusername}/profile')
     return redirect(f'/influencer/{username}/profile')
+
+@main_bp.route('/influencer/<username>/delete',methods=['GET','POST'])
+def influencer_delete(username):
+    if request.method == 'POST':
+        password = request.form['password']
+        influencer = Influencers.query.filter_by(username=username).first()
+        userpassword = influencer.password
+        print(password)
+        print(userpassword)
+        if(password == userpassword):
+            db.session.delete(influencer)
+            db.session.commit()
+        else:
+            print('Invalid password')
+            return render_template('influencer_delete.html', username=username,error='Invalid password')
+        return redirect('/')
+    return render_template('influencer_delete.html', username=username)

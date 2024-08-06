@@ -1,0 +1,20 @@
+/* Center the card horizontally and vertically */
+.centered-card {
+    max-width: 500px; /* Adjust the width as needed */
+    margin: 0 auto;   /* Center horizontally */
+    padding: 20px;    /* Add padding inside the card */
+    border: 1px solid #ddd; /* Optional: Add border for better visibility */
+    border-radius: 8px;    /* Optional: Add border-radius for rounded corners */
+    background-color: #fff; /* Optional: Add background color */
+}
+
+/* Center the card in the viewport vertically */
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh; /* Full viewport height */
+    margin: 0;
+    background-color: #f8f9fa; /* Optional: Set a background color for the page */
+}
+    
