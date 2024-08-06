@@ -32,5 +32,10 @@ class Sponsors(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(100), nullable=False)
+    companycode = db.Column(db.String(100), nullable=False)
+    address = db.Column(db.String, nullable=False)
+    phone = db.Column(db.String(20), nullable=False)
     password = db.Column(db.String(100), nullable=False)
+    industry = db.Column(db.String(100), nullable=False)
     website = db.Column(db.String(100), nullable=False)
+    

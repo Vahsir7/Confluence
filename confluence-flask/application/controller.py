@@ -42,6 +42,8 @@ def login():
     
     elif logintype == 'sponsor':
         sponsor = Sponsors.query.filter_by(email=email, password=password).first()
+        if not sponsor:
+            sponsor = Sponsors.query.filter_by(companycode=email, password=password).first()
         if sponsor:
             return render_template('sponsor_dashboard.html', sponsor=sponsor)
         return render_template('signin.html', error='Invalid email or password')
@@ -112,9 +114,24 @@ def signup_sponsor():
     if request.method == 'POST':
         name = request.form['name']
         email = request.form['email']
+        companycode = request.form['companycode']
         password = request.form['password']
-        account = request.form['account']
-        sponsor = Sponsors(name=name,email=email,password=password,website=account)
+        address = request.form['address']
+        phone = request.form['phone']
+        industry = request.form['industry']
+        website = request.form['website']
+
+        if (companycode in [sponsor.companycode for sponsor in Sponsors.query.all()]):
+            return render_template('signup_sponsor.html', error='Company code already exists', 
+                                   name=name, email=email, companycode=companycode, 
+                                   address=address, phone=phone, industry=industry, website=website)
+        
+        if (email in [sponsor.email for sponsor in Sponsors.query.all()]):
+            return render_template('signup_sponsor.html', error='Email already exists', 
+                                   name=name, email=email, companycode=companycode, 
+                                   address=address, phone=phone, industry=industry, website=website)
+        
+        sponsor = Sponsors(name=name,email=email,companycode=companycode,address=address,phone=phone,password=password,industry=industry,website=website)
         db.session.add(sponsor)
         db.session.commit()
         return render_template('signin.html')
@@ -199,3 +216,5 @@ def influencer_delete(username):
             return render_template('influencer_delete.html', username=username,error='Invalid password')
         return redirect('/')
     return render_template('influencer_delete.html', username=username)
+
+

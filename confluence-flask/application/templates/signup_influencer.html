@@ -18,10 +18,11 @@
             </div>
             <hr>
         {% endif %}
+        (Note: All fields marked with * are required)
         <form action="/signup/influencer" method="POST" enctype="multipart/form-data">
             <div class="row">    
                 <div class="col-md-4">
-                    <label for="Fname">First Name:</label>
+                    <label for="Fname">First Name:*</label>
                     <input type="text" class="form-control" id="Fname" name="Fname" value="{{ Fname or '' }}" required>
                 </div>
                 <div class="col-md-4">
@@ -29,37 +30,37 @@
                     <input type="text" class="form-control" id="Mname" name="Mname" value="{{ Mname or '' }}">
                 </div>
                 <div class="col-md-4">
-                    <label for="Lname">Last Name:</label>
+                    <label for="Lname">Last Name:*</label>
                     <input type="text" class="form-control" id="Lname" name="Lname" value="{{ Lname or '' }}">
                 </div>
             </div>
 
             <div class="row">
                 <div class="col-md-4">
-                    <label for="username">Username:</label>
+                    <label for="username">Username:*</label>
                     <input type="text" class="form-control" id="username" name="username" value="{{ username or '' }}" required>
                 </div>
                 <div class="col-md-4">
-                    <label for="email">Email:</label>
+                    <label for="email">Email:*</label>
                     <input type="email" class="form-control" id="email" name="email" value="{{ email or '' }}" required>
                 </div>    
                 <div class="col-md-4">
-                    <label for="phone">Phone:</label>
+                    <label for="phone">Phone:*</label>
                     <input type="text" class="form-control" id="phone" name="phone" value="{{ phone or '' }}" required>
                 </div>
             </div>
 
             <div class="row">
                 <div class="col-md-4">
-                    <label for="address">Address:</label>
+                    <label for="address">Address:*</label>
                     <input type="text" class="form-control" id="address" name="address" value="{{ address or '' }}" required>
                 </div>
                 <div class="col-md-4">
-                    <label for="socialmedia">Social Media Handle:</label>
+                    <label for="socialmedia">Social Media Handle:*</label>
                     <input type="text" class="form-control" id="socialmedia" name="socialmedia" value="{{ socialmedia or '' }}" required>
                 </div>
                 <div class="col-md-4">
-                    <label for="gender" class="form-label">Gender</label><br>
+                    <label for="gender" class="form-label">Gender*</label><br>
                     <select class="form-select" id="gender" name="gender">
                         <option value="male" {% if gender == 'male' %}selected{% endif %}>Male</option>
                         <option value="female" {% if gender == 'female' %}selected{% endif %}>Female</option>
@@ -71,7 +72,7 @@
 
             <div class="row">
                 <div class="col-md-4">
-                    <label for="password">Password:</label>
+                    <label for="password">Password:*</label>
                     <input type="password" class="form-control" id="password" name="password" required>
                 </div>
             </div>

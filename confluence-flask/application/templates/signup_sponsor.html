@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <title>Signup as Sponsor</title>
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="jumbotron-fluid">
+            <h1 class="display-4">Sign Up as Sponsor</h1>
+        </div>
+        <hr>
+        {% if error %}
+            <div class="alert alert-danger">
+                <strong>{{ error }}</strong>
+            </div>
+            <hr>
+        {% endif %}
+        (Note: All fields marked with * are required)
+        <form action="/signup/sponsor" method="POST" enctype="multipart/form-data">
+            <div class="row">    
+                <div class="col-md-4">
+                    <label for="name">Name:*</label>
+                    <input type="text" class="form-control" id="name" name="name" value="{{ name or '' }}" required>
+                </div>
+                <div class="col-md-4">
+                    <label for="email">Email:*</label>
+                    <input type="email" class="form-control" id="email" name="email" value="{{ email or '' }}" required>
+                </div>    
+                <div class="col-md-4">
+                    <label for="phone">Phone:*</label>
+                    <input type="text" class="form-control" id="phone" name="phone" value="{{ phone or '' }}" required>
+                </div>
+            </div>
+
+            <div class="row">
+
+                <div class="col-md-4">
+                    <label for="companycode">Company Code:*</label>
+                    <input type="text" class="form-control" id="companycode" name="companycode" value="{{ companycode or '' }}" required>
+                </div>
+
+                <div class="col-md-4">
+                    <label for="password">Password:*</label>
+                    <input type="password" class="form-control" id="password" name="password" required>
+                </div>
+                
+                <div class="col-md-4">
+                    <label for="website">Website:*</label>
+                    <input type="text" class="form-control" id="website" name="website" value="{{ website or '' }}" required>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <label for="address">Address:*</label>
+                    <input type="text" class="form-control" id="address" name="address" value="{{ address or '' }}" required>
+                </div>
+
+                <div class="col-md-4">
+                    <label for="industry" class="form-label">Industry*</label><br>
+                    <select class="form-select" id="industry" name="industry">
+                        <option value="shoes" {% if industry == 'Shoes' %}selected{% endif %}>Shoe</option>
+                        <option value="clothing" {% if industry == 'Clothing' %}selected{% endif %}>Clothing</option>
+                        <option value="electronics" {% if industry == 'Electronics' %}selected{% endif %}>Electronics</option>
+                        <option value="food" {% if industry == 'Food' %}selected{% endif %}>Food</option>
+                        <option value="beauty" {% if industry == 'Beauty' %}selected{% endif %}>Beauty</option>
+                        <option value="health" {% if industry == 'Health' %}selected{% endif %}>Health</option>
+                        <option value="fitness" {% if industry == 'Fitness' %}selected{% endif %}>Fitness</option>
+                        <option value="entertainment" {% if industry == 'Entertainment' %}selected{% endif %}>Entertainment</option>
+                        <option value="other" {% if industry == 'Other' %}selected{% endif %}>Other</option>
+
+                    </select>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-md-4">
+                    <button type="submit" class="btn btn-primary">Sign Up</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
