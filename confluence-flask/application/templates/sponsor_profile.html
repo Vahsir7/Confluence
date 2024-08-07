@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <title>{{sponsor.name}}</title>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const updateButton = document.getElementById("updateBtn");
+            const saveButton = document.getElementById("saveBtn");
+            const formFields = document.querySelectorAll("#profileForm input, #profileForm select");
+
+            updateButton.addEventListener("click", function() {
+                formFields.forEach(field => field.disabled = false);
+                saveButton.disabled = false;
+                updateButton.disabled = true;
+            });
+
+            saveButton.addEventListener("click", function() {
+                document.getElementById("profileForm").submit();
+                saveButton.disabled = true;
+                updateButton.disabled = false;
+            });
+        });
+    </script>
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="jumbotron-fluid">
+            <h1 class="display-4">Profile</h1>
+        </div>
+        <hr>
+        {% if error %}
+            <div class="alert alert-danger">
+                <strong>{{ error }}</strong>
+            </div>
+            <hr>
+        {% endif %}
+        <form id="profileForm" action="/sponsor/{{sponsor.name}}/update" method="POST" enctype="multipart/form-data">
+            <div class="row">
+                <div class="col-md-1">
+                    <button type="button" id="updateBtn" class="btn btn-primary">Update</button>
+                </div>
+                <div class="col-md-4">
+                    <button type="button" id="saveBtn" class="btn btn-primary" disabled>Save</button>
+                </div>
+                <div class="col-md-6">
+                </div>
+                <div class="col-md-1">
+                    <a href="/sponsor/{{sponsor.companycode}}" class="btn btn-primary">Home</a>
+                </div>
+            </div>
+            
+            <br>
+            <div class="row">
+                <div class="col-md-4">
+                    <label for="name">Name:</label>
+                    <input type="text" class="form-control" id="name" name="name" value="{{sponsor.name}}" disabled>
+                </div>
+                <div class="col-md-4">
+                    <label for="email">Email:</label>
+                    <input type="email" class="form-control" id="email" name="email" value="{{sponsor.email}}" disabled>
+                </div>
+                <div class="col-md-4">
+                    <label for="phone">Phone:</label>
+                    <input type="text" class="form-control" id="phone" name="phone" value="{{sponsor.phone}}" disabled>
+                </div>
+            </div>
+
+            <br>
+            <div class="row">
+                <div class="col-md-4">
+                    <label for="companycode">Company Code:</label>
+                    <input type="text" class="form-control" id="companycode" name="companycode" value="{{sponsor.companycode}}" disabled>
+                </div>
+                <div class="col-md-4">
+                    <label for="website">Website:</label>
+                    <input type="text" class="form-control" id="website" name="website" value="{{sponsor.website}}" disabled>
+                </div>
+                <div class="col-md-4">
+                    <label for="address">Address:</label>
+                    <input type="text" class="form-control" id="address" name="address" value="{{sponsor.address}}" disabled>
+                </div>
+            </div>
+
+            <br>
+            <div class="row">
+                <div class="col-md-4">
+                    <label for="industry">Industry:</label><br>
+                    <select class="form-select" id="industry" name="industry" disabled>
+                        <option value="shoes" {% if sponsor.industry == 'Shoes' %}selected{% endif %}>Shoe</option>
+                        <option value="clothing" {% if sponsor.industry == 'Clothing' %}selected{% endif %}>Clothing</option>
+                        <option value="electronics" {% if sponsor.industry == 'Electronics' %}selected{% endif %}>Electronics</option>
+                        <option value="food" {% if sponsor.industry == 'Food' %}selected{% endif %}>Food</option>
+                        <option value="beauty" {% if sponsor.industry == 'Beauty' %}selected{% endif %}>Beauty</option>
+                        <option value="health" {% if sponsor.industry == 'Health' %}selected{% endif %}>Health</option>
+                        <option value="fitness" {% if sponsor.industry == 'Fitness' %}selected{% endif %}>Fitness</option>
+                        <option value="entertainment" {% if sponsor.industry == 'Entertainment' %}selected{% endif %}>Entertainment</option>
+                        <option value="other" {% if sponsor.industry == 'Other' %}selected{% endif %}>Other</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label for="password">Password:</label>
+                    <input type="password" class="form-control" id="password" name="password" value="{{sponsor.password}}" disabled>
+                </div>
+            </div>
+            
+            <br>
+            <div class="row">
+                <div class="col-md-4">
+                    <label for="companyLogo">Company Logo:</label>
+                    {% if sponsor.companyLogo %}
+                        <div>
+                            <img src="{{ url_for('static', filename='uploads/' + sponsor.companyLogo) }}" alt="Current Company Logo" style="max-width: 100px; max-height: 100px;">
+                            <p>Current Company Logo: {{ sponsor.companyLogo }}</p>
+                        </div>
+                    {% endif %}
+                    <input type="file" class="form-control" id="companyLogo" name="companyLogo" disabled>
+                </div>
+            </div>
+        </form>
+        <hr>
+        <div style="background-color: hsl(0, 80%, 80%);">
+            <div class="row">
+                <div class="col-md-12">
+                    <hr>
+                    <h4>Danger Zone</h4>
+                    <hr>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <strong>Click the button to delete your account</strong>
+                    <a href="/sponsor/{{sponsor.name}}/delete" class="btn btn-danger">Delete account</a>
+                </div>  
+            </div>
+        </div>
+    </div>
+</body>
+</html>

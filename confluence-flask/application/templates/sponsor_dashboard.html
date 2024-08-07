@@ -11,6 +11,7 @@
         <header>
             <span>welcome {{sponsor.name}}</span>
             <nav>
+                <a href ="{{ url_for('main.sponsor_profile', companycode=sponsor.companycode) }}">Profile</a>
                 <a href="#">Search</a>
                 <a href="#">Campaigns</a>
                 <a href="#">Mail</a>

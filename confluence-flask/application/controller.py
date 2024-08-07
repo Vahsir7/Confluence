@@ -237,3 +237,9 @@ def influencer_delete(username):
 def sponsor_dashboard(companycode):
     sponsor = Sponsors.query.filter_by(companycode=companycode).first()
     return render_template('sponsor_dashboard.html', sponsor=sponsor)
+
+#sponsor profile
+@main_bp.route('/sponsor/<companycode>/profile')
+def sponsor_profile(companycode):
+    sponsor = Sponsors.query.filter_by(companycode=companycode).first()
+    return render_template('sponsor_profile.html', sponsor=sponsor)
