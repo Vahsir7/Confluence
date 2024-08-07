@@ -21,14 +21,22 @@ and install the dependencies
 
 # Features
 
+## Influencer
 1. User can register and login
 2. If you are using it for the first click signup
 3. login with your details
 4. go to profile to update or delete account
+5. view all the campaigns from `Search` option
+
+## Sponsors
+1. Company can register and login
+2. If you are using it for the first click signup
+3. login with your details
+4. go to profile to update or delete account
+5. Add new campaigns from the `Add Campaign` option
 
 # WIP
-1. Sponsorships page
-2. Campaigns posting
-3. Accepting and rejecting sponsorships
-4. application management
-5. admin portal
+1. Accepting and rejecting sponsorships
+2. application management
+3. Mail system
+4. admin portal
