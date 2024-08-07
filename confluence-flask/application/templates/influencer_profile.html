@@ -115,7 +115,7 @@
                     <label for="profilePic">Profile Picture:</label>
                     {% if influencer.profilePic %}
                         <div>
-                            <img src="{{ url_for('static', filename='uploads/' + influencer.profilePic) }}" alt="Current Profile Picture" style="max-width: 100px; max-height: 100px;">
+                            <img src="{{ url_for('static', filename='uploads/influencers/' + influencer.profilePic) }}" alt="Current Profile Picture" style="max-width: 100px; max-height: 100px;">
                             <p>Current Profile Picture: {{ influencer.profilePic }}</p>
                         </div>
                     {% endif %}

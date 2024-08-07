@@ -89,7 +89,7 @@ def signup_influencer():
         if profilePic.filename != '':
             filename = username
             filename += '.jpg'
-            profilePic.save(os.path.join(os.path.abspath(os.path.dirname(__file__)), 'static/uploads', filename))
+            profilePic.save(os.path.join(os.path.abspath(os.path.dirname(__file__)), 'static/uploads/influencers', filename))
         else:
             if gender == 'male':
                 filename = 'male.jpg'
@@ -132,8 +132,8 @@ def signup_sponsor():
         
         if companyLogo.filename != '':
             filename = companycode
-            filename += '.jpg'
-            companyLogo.save(os.path.join(os.path.abspath(os.path.dirname(__file__)), 'static/uploads', filename))
+            #filename += '.jpg'
+            companyLogo.save(os.path.join(os.path.abspath(os.path.dirname(__file__)), 'static/uploads/sponsors', filename))
         else:
             filename = 'defaultCompany.jpg'
         
@@ -195,7 +195,7 @@ def influencer_update(username):
         
         if profilePic.filename != '':
             filename = username
-            profilePic.save(os.path.join(os.path.abspath(os.path.dirname(__file__)), 'static/uploads', filename))
+            profilePic.save(os.path.join(os.path.abspath(os.path.dirname(__file__)), 'static/uploads/influencers', filename))
 
         
         db.session.query(Influencers).filter(Influencers.username == username).update({
@@ -271,7 +271,7 @@ def sponsor_update(companycode):
         
         if companyLogo.filename != '':
             filename = companycode
-            companyLogo.save(os.path.join(os.path.abspath(os.path.dirname(__file__)), 'static/uploads', filename))
+            companyLogo.save(os.path.join(os.path.abspath(os.path.dirname(__file__)), 'static/uploads/sponsors', filename))
 
         db.session.query(Sponsors).filter(Sponsors.companycode == companycode).update({
             Sponsors.name: name,

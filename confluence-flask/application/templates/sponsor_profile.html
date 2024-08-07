@@ -112,7 +112,7 @@
                     <label for="companyLogo">Company Logo:</label>
                     {% if sponsor.companyLogo %}
                         <div>
-                            <img src="{{ url_for('static', filename='uploads/' + sponsor.companyLogo) }}" alt="Current Company Logo" style="max-width: 100px; max-height: 100px;">
+                            <img src="{{ url_for('static', filename='uploads/sponsors/' + sponsor.companyLogo) }}" alt="Current Company Logo" style="max-width: 100px; max-height: 100px;">
                             <p>Current Company Logo: {{ sponsor.companyLogo }}</p>
                         </div>
                     {% endif %}
