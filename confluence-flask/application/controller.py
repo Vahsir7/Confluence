@@ -45,11 +45,12 @@ def login():
         if not sponsor:
             sponsor = Sponsors.query.filter_by(companycode=email, password=password).first()
         if sponsor:
-            return render_template('sponsor_dashboard.html', sponsor=sponsor)
+            return redirect(f'/sponsor/{sponsor.companycode}')
         return render_template('signin.html', error='Invalid email or password')
     else:
         return render_template('Welcome admin')
     
+
 #redirects to either signup_influencer or signup_sponsor
 @main_bp.route('/signup')
 def signup_type():
@@ -79,34 +80,31 @@ def signup_influencer():
                                    gender=gender, phone=phone, address=address, email=email,
                                    socialmedia=socialmedia)
         
-        elif (email in [influencer.email for influencer in Influencers.query.all()]):
+        if (email in [influencer.email for influencer in Influencers.query.all()]):
             return render_template('signup_influencer.html', error='Email already exists'
                                    ,Fname=Fname, Mname=Mname, Lname=Lname, username=username,
                                    gender=gender, phone=phone, address=address, email=email,
                                    socialmedia=socialmedia)
 
+        if profilePic.filename != '':
+            filename = username
+            filename += '.jpg'
+            profilePic.save(os.path.join(os.path.abspath(os.path.dirname(__file__)), 'static/uploads', filename))
         else:
-            if profilePic.filename != '':
-                filename = username
-                filename += '.jpg'
-                profilePic.save(os.path.join(os.path.abspath(os.path.dirname(__file__)), 'static/uploads', filename))
+            if gender == 'male':
+                filename = 'male.jpg'
+            elif gender == 'female':
+                filename = 'female.jpg'
             else:
-                if gender == 'male':
-                    filename = 'male.jpg'
-                elif gender == 'female':
-                    filename = 'female.jpg'
-                else:
-                    filename = 'neutral.jpg'
-            
-            
+                filename = 'neutral.jpg'
 
-            influencer = Influencers(Fname=Fname,Mname=Mname,Lname=Lname,username=username,gender=gender,phone=phone,address=address,email=email,socialmedia=socialmedia,password=password,profilePic=filename)
-            account = InfluencerAccounts(email=email,username=username,password=password,influencer=influencer)
-            db.session.add(account)
-            db.session.add(influencer)
-            db.session.commit()
+        influencer = Influencers(Fname=Fname,Mname=Mname,Lname=Lname,username=username,gender=gender,phone=phone,address=address,email=email,socialmedia=socialmedia,password=password,profilePic=filename)
+        account = InfluencerAccounts(email=email,username=username,password=password,influencer=influencer)
+        db.session.add(account)
+        db.session.add(influencer)
+        db.session.commit()
 
-            return render_template('signin.html')
+        return render_template('signin.html')
     return render_template('signup_influencer.html')
 
 @main_bp.route('/signup/sponsor',methods=['POST','GET'])
@@ -120,6 +118,7 @@ def signup_sponsor():
         phone = request.form['phone']
         industry = request.form['industry']
         website = request.form['website']
+        companyLogo = request.files['companyLogo']
 
         if (companycode in [sponsor.companycode for sponsor in Sponsors.query.all()]):
             return render_template('signup_sponsor.html', error='Company code already exists', 
@@ -131,7 +130,23 @@ def signup_sponsor():
                                    name=name, email=email, companycode=companycode, 
                                    address=address, phone=phone, industry=industry, website=website)
         
-        sponsor = Sponsors(name=name,email=email,companycode=companycode,address=address,phone=phone,password=password,industry=industry,website=website)
+        if companyLogo.filename != '':
+            filename = companycode
+            filename += '.jpg'
+            companyLogo.save(os.path.join(os.path.abspath(os.path.dirname(__file__)), 'static/uploads', filename))
+        else:
+            filename = 'defaultCompany.jpg'
+        
+        sponsor = Sponsors(name=name,
+                           email=email,
+                           companycode=companycode,
+                           address=address,
+                           phone=phone,
+                           password=password,
+                           industry=industry,
+                           website=website,
+                           companyLogo=filename)
+        
         db.session.add(sponsor)
         db.session.commit()
         return render_template('signin.html')
@@ -217,4 +232,8 @@ def influencer_delete(username):
         return redirect('/')
     return render_template('influencer_delete.html', username=username)
 
-
+#sponsor dashboard
+@main_bp.route('/sponsor/<companycode>')
+def sponsor_dashboard(companycode):
+    sponsor = Sponsors.query.filter_by(companycode=companycode).first()
+    return render_template('sponsor_dashboard.html', sponsor=sponsor)

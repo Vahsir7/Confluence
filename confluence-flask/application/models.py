@@ -38,4 +38,5 @@ class Sponsors(db.Model):
     password = db.Column(db.String(100), nullable=False)
     industry = db.Column(db.String(100), nullable=False)
     website = db.Column(db.String(100), nullable=False)
+    companyLogo = db.Column(db.String, nullable=True)
     

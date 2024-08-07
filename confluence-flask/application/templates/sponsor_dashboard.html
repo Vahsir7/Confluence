@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='dashboard.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <span>welcome {{sponsor.name}}</span>
+            <nav>
+                <a href="#">Search</a>
+                <a href="#">Campaigns</a>
+                <a href="#">Mail</a>
+                <a href="#">Logout</a>
+            </nav>
+        </header>
+        <div class="content">
+            <aside class="profile">
+                <div class="profile-image">
+                    <img src="{{ url_for('static', filename='uploads/' + sponsor.companyLogo) }}" alt="{{ sponsor.name }}'s Profile Picture">
+                </div>
+                <div class="profile-details">
+                    <hr>
+                    <p style="color:#333;">@{{sponsor.companycode}}</p>
+                    <p style="font-size: 16px;">{{sponsor.name}}</p>
+                    <p>{{sponsor.industry}}</p>
+                    <p>earnings</p>
+                    <p>ratings</p>
+                </div>
+            </aside>
+            <main>
+                <section class="panel section">
+                    <h2>Campaigns</h2>
+                    <p>There are no Campaigns to show</p>
+                </section>
+                <section class="panel section">
+                    <h2>Mail</h2>
+                    <p>There are no messages to show</p>
+                </section>
+            </main>
+        </div>
+    </div>
+</body>
+</html>
