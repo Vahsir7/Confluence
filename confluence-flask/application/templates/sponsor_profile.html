@@ -37,7 +37,7 @@
             </div>
             <hr>
         {% endif %}
-        <form id="profileForm" action="/sponsor/{{sponsor.name}}/update" method="POST" enctype="multipart/form-data">
+        <form id="profileForm" action="/sponsor/{{sponsor.companycode}}/update" method="POST" enctype="multipart/form-data">
             <div class="row">
                 <div class="col-md-1">
                     <button type="button" id="updateBtn" class="btn btn-primary">Update</button>
@@ -132,7 +132,7 @@
             <div class="row">
                 <div class="col-md-6">
                     <strong>Click the button to delete your account</strong>
-                    <a href="/sponsor/{{sponsor.name}}/delete" class="btn btn-danger">Delete account</a>
+                    <a href="/sponsor/{{sponsor.companycode}}/delete" class="btn btn-danger">Delete account</a>
                 </div>  
             </div>
         </div>

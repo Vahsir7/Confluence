@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deletion</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='delete.css') }}">
+    <style>
+        .centered-card {
+            max-width: 500px; /* Adjust the width as needed */
+            margin: 0 auto; /* Centers the card horizontally */
+        }
+    </style>
+</head>
+<body style="background-color: hsl(0, 80%, 80%);">
+    <div class="container">
+        <div class="jumbotron-fluid">
+            <h1>Deletion of account</h1>
+            <hr>
+        </div>
+        {% if error %}
+            <div class="alert alert-danger">
+                <strong>{{ error }}</strong>
+            </div>
+            <hr>
+        {% endif %}
+        <div class="card centered-card">
+            <form action="/sponsor/{{companycode}}/delete" method="POST">
+                <div class="row">
+                    <div class="col-md-12">
+                        <label for="password"><strong>Enter your password:</strong></label>
+                        <input type="password" id="password" name="password" required>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-md-12">
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

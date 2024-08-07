@@ -243,3 +243,62 @@ def sponsor_dashboard(companycode):
 def sponsor_profile(companycode):
     sponsor = Sponsors.query.filter_by(companycode=companycode).first()
     return render_template('sponsor_profile.html', sponsor=sponsor)
+
+#update sponsor profile
+@main_bp.route('/sponsor/<companycode>/update', methods=['POST'])
+def sponsor_update(companycode):
+    sponsor = Sponsors.query.filter_by(companycode=companycode).first()
+    filename = sponsor.companyLogo
+    email = sponsor.email
+    if request.method == 'POST':
+        name = request.form['name']
+        newemail = request.form['email']
+        newcompanycode = request.form['companycode']
+        password = request.form['password']
+        address = request.form['address']
+        phone = request.form['phone']
+        industry = request.form['industry']
+        website = request.form['website']
+        companyLogo = request.files['companyLogo']
+
+        if (newcompanycode in [sponsor.companycode for sponsor in Sponsors.query.all()]):
+            if(newcompanycode != companycode):
+                return render_template('sponsor_profile.html', sponsor=sponsor, error='Company code already exists')
+        
+        if (newemail in [sponsor.email for sponsor in Sponsors.query.all()]):
+            if(newemail != email):
+                return render_template('sponsor_profile.html', sponsor=sponsor, error='Email already exists')
+        
+        if companyLogo.filename != '':
+            filename = companycode
+            companyLogo.save(os.path.join(os.path.abspath(os.path.dirname(__file__)), 'static/uploads', filename))
+
+        db.session.query(Sponsors).filter(Sponsors.companycode == companycode).update({
+            Sponsors.name: name,
+            Sponsors.email: newemail,
+            Sponsors.companycode: newcompanycode,
+            Sponsors.password: password,
+            Sponsors.address: address,
+            Sponsors.phone: phone,
+            Sponsors.industry: industry,
+            Sponsors.website: website,
+            Sponsors.companyLogo: filename
+        })
+        db.session.commit()
+        return redirect(f'/sponsor/{newcompanycode}/profile')
+    return redirect(f'/sponsor/{companycode}/profile')
+
+#delete sponsor profile
+@main_bp.route('/sponsor/<companycode>/delete',methods=['GET','POST'])
+def sponsor_delete(companycode):
+    if request.method == 'POST':
+        password = request.form['password']
+        sponsor = Sponsors.query.filter_by(companycode=companycode).first()
+        userpassword = sponsor.password
+        if(password == userpassword):
+            db.session.delete(sponsor)
+            db.session.commit()
+        else:
+            return render_template('sponsor_delete.html', companycode=companycode,error='Invalid password')
+        return redirect('/')
+    return render_template('sponsor_delete.html', companycode=companycode)
