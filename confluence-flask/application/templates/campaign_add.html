@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <title>Create or Update Campaign</title>
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="jumbotron-fluid">
+            <h1 class="display-4">Add campaign</h1>
+        </div>
+        <hr>
+        {% if error %}
+            <div class="alert alert-danger">
+                <strong>{{ error }}</strong>
+            </div>
+            <hr>
+        {% endif %}
+        (Note: All fields marked with * are required)
+        
+        <form action="/sponsor/{{sponsor.companycode}}/campaign/create" method="POST">
+            <div class="row">
+                <div class="col-md-4">
+                    <label for="sponsor_id">Sponsor ID:*</label>
+                    <input type="text" class="form-control" id="sponsor_id" name="sponsor_id" value="{{ sponsor.companycode }}" disabled>
+                </div>
+                <div class="col-md-4">
+                    <label for="companyLogo">Company Logo:*</label>
+                    <input type="text" class="form-control" id="companyLogo" name="companyLogo" value="{{ sponsor.companyLogo }}" disabled>
+                </div>
+                <div class="col-md-4">
+                    <label for="companyName">Company Name:*</label>
+                    <input type="text" class="form-control" id="companyName" name="companyName" value="{{ sponsor.name }}" disabled>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <label for="Title">Title:*</label>
+                    <input type="text" class="form-control" id="Title" name="Title" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="Description">Description:*</label>
+                    <textarea class="form-control" id="Description" name="Description" required></textarea>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <label for="tags">Tags:*</label>
+                    <input type="text" class="form-control" id="tags" name="tags" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="Salary">Salary:*</label>
+                    <input type="number" class="form-control" id="Salary" name="Salary" required>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <label for="videos_req">Videos Required:</label>
+                    <input type="number" class="form-control" id="videos_req" name="videos_req" >
+                </div>
+                <div class="col-md-3">
+                    <label for="StartDate">Start Date:*</label>
+                    <input type="date" class="form-control" id="StartDate" name="StartDate" required>
+                </div>
+                <div class="col-md-3">
+                    <label for="EndDate">End Date:*</label>
+                    <input type="date" class="form-control" id="EndDate" name="EndDate" required>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <label for="contact_phone">Contact Phone:*</label>
+                    <input type="text" class="form-control" id="contact_phone" name="contact_phone" value="{{ campaign.contact_phone or sponsor.phone }}" disabled>
+                </div>
+                <div class="col-md-6">
+                    <label for="contact_email">Contact Email:*</label>
+                    <input type="email" class="form-control" id="contact_email" name="contact_email" value="{{ campaign.contact_email or sponsor.email }}" disabled>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-md-4">
+                    <button type="submit" class="btn btn-primary">Add campaign</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

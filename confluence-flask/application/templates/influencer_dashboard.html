@@ -12,7 +12,7 @@
             <span>welcome {{ influencer.username }}</span>
             <nav>
                 <a href ="{{ url_for('main.influencer_profile', username=influencer.username) }}">Profile</a>
-                <a href="#">Search</a>
+                <a href="{{url_for('main.influencer_campaigns', username=influencer.username)}}">Search</a>
                 <a href="#">Invitations</a>
                 <a href="#">Applications</a>
                 <a href="#">Logout</a>

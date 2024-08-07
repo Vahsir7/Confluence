@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campaign Details</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="card">
+            <div class="card-header text-center">
+                <img src="{{ url_for('static', filename='static/sponsors/') + campaign.companyLogo }}" alt="Company Logo" style="width: 100px; height: 100px;"> 
+                <h2>{{ campaign.Title }}</h2>
+                <h4 class="text-muted">{{ campaign.companyName }}</h4>
+            </div>
+            <div class="card-body">
+                <p class="card-text"><strong>Description:</strong> {{ campaign.Description }}</p>
+                <p class="card-text"><strong>Tags:</strong> {{ campaign.tags }}</p>
+                <p class="card-text"><strong>Salary:</strong> ₹{{ campaign.Salary }}</p>
+                <p class="card-text"><strong>Videos Required:</strong> {{ campaign.videos_req }}</p>
+                <p class="card-text"><strong>Start Date:</strong> {{ campaign.StartDate }}</p>
+                <p class="card-text"><strong>End Date:</strong> {{ campaign.EndDate }}</p>
+                <p class="card-text"><strong>Contact Phone:</strong> {{ campaign.contact_phone }}</p>
+                <p class="card-text"><strong>Contact Email:</strong> {{ campaign.contact_email }}</p>
+                <a href="/apply/{{ campaign.id }}" class="btn btn-primary btn-block">Apply</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

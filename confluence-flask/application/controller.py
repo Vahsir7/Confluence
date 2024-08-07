@@ -1,6 +1,7 @@
 from flask import request, render_template, Blueprint, redirect, url_for, flash
 from .models import *
 from . import db
+from datetime import datetime
 import os
 
 main_bp = Blueprint('main', __name__)
@@ -232,6 +233,20 @@ def influencer_delete(username):
         return redirect('/')
     return render_template('influencer_delete.html', username=username)
 
+#view campaigns
+@main_bp.route('/influencer/<username>/campaigns')
+def influencer_campaigns(username):
+    campaigns = Campaigns.query.all()
+    #print(len(campaigns))
+    return render_template('campaigns_list.html', username=username, campaigns=campaigns)
+
+#view campaign details
+@main_bp.route('/influencer/<username>/campaigns/<int:id>')
+def influencer_campaign_details(username, id):
+    campaign = Campaigns.query.filter_by(id=id).first()
+    return render_template('campaign_details.html', campaign=campaign)
+    
+
 #sponsor dashboard
 @main_bp.route('/sponsor/<companycode>')
 def sponsor_dashboard(companycode):
@@ -302,3 +317,45 @@ def sponsor_delete(companycode):
             return render_template('sponsor_delete.html', companycode=companycode,error='Invalid password')
         return redirect('/')
     return render_template('sponsor_delete.html', companycode=companycode)
+
+# add campaign
+@main_bp.route('/sponsor/<companycode>/campaign/create', methods=['POST','GET'])
+def create_campaign(companycode):
+
+    sponsor = Sponsors.query.filter_by(companycode=companycode).first()
+    campaign = Campaigns.query.filter_by(sponsor_id=companycode).first()
+
+    if request.method == 'POST':
+        Title = request.form['Title']
+        Description = request.form['Description']
+        tags = request.form['tags']
+        Salary = request.form['Salary']
+        videos_req = request.form['videos_req']
+        StartDate = datetime.strptime(request.form['StartDate'], '%Y-%m-%d').date()
+        EndDate = datetime.strptime(request.form['EndDate'], '%Y-%m-%d').date()
+
+        contact_phone = sponsor.phone
+        contact_email = sponsor.email
+        companyLogo = sponsor.companyLogo
+        companyName = sponsor.name
+
+        campaign = Campaigns(sponsor_id=companycode,
+                             companyLogo=companyLogo,
+                             companyName=companyName,
+                             Title=Title,
+                             Description=Description,
+                             tags=tags,
+                             Salary=Salary,
+                             videos_req=videos_req,
+                             StartDate=StartDate,
+                             EndDate=EndDate,
+                             contact_phone=contact_phone,
+                             contact_email=contact_email)
+        
+        db.session.add(campaign)
+        db.session.commit()
+        return redirect(f'/sponsor/{companycode}')
+    
+    print(sponsor.companycode)
+    return render_template('campaign_add.html', sponsor=sponsor, campaign=campaign)
+
