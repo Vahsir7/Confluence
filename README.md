@@ -1,6 +1,19 @@
 # Confluence
 Influencer Engagement and Sponsorship Coordination Platform. 
 
+This is a web application that connects influencers and sponsors. Influencers can register and login to view all the campaigns and sponsors can register and login to add new campaigns.
+The influencers will receive payment after each campaign is completed.
+There will be a admin portal that can manage all the campaigns and users.
+
+# Tech Stack
+1. Flask
+2. SQLAlchemy
+3. SQLite
+4. HTML
+5. CSS
+6. Bootstrap
+7. Javascript (only for some visual effects)
+
 `Demo practice` is the folder that i have done my flask learning work, i will implement all my knowledge from that concepts and polish them to make a full fledged application.
 
 # Steps of installation

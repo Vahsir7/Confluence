@@ -1,7 +1,10 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
+
 
 db = SQLAlchemy()
+migrate = Migrate()
 
 def create_app():
     app = Flask(__name__)
@@ -10,10 +13,10 @@ def create_app():
     app.config['UPLOAD_FOLDER'] = 'application/static/uploads'
     
     db.init_app(app)
-    
+    migrate.init_app(app, db)
 
     with app.app_context():
-        from .models import Influencers, Sponsors
+        from .models import Influencers, Sponsors, Campaigns, InfluencerAccounts, Applications
         db.create_all()
     
     # Import the routes to ensure they are registered

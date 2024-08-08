@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <div class="jumbotron-fluid">
+            <h1 class="display-4">Applications</h1>
+            <hr>
+        </div>
+        <div class="row">
+            <div class="col-md-1">
+                <a href="/sponsor/{{companycode}}" class="btn btn-primary">Home</a>
+            </div>
+            <div class="col-md-2">
+                <a href="/sponsor/{{companycode}}/campaigns" class="btn btn-primary">Go to campaigns</a>
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-md-10">
+                <h3>
+                    Pending applicants
+                </h3>
+            </div>
+        </div>  
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">Serial No</th>
+                            <th scope="col">Influencer ID</th>
+                            <th scope="col">Influencer Name</th>
+                            <th scope="col">Influencer Reach</th>
+                            <th scope="col">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if influencers %}
+                            {% for influencer in influencers %}
+                            <tr>
+                                <td>{{ loop.index }}</td>
+                                <td>
+                                    <img src="{{ url_for('static', filename='uploads/influencers/' + influencer.profilePic) }}"
+                                        alt="{{ influencer.username }}"
+                                        style="width: 50px; height: 50px;"> 
+                                    {{ influencer.username }}
+                                </td>
+                                <td>{{ influencer.Fname }} {{ influencer.Mname }} {{ influencer.Lname }}</td>
+                                <td>WIP</td>
+                                <td>
+                                    <!-- Form for Accept -->
+                                    <form action="{{ url_for('main.change_application_status', companycode=companycode, id=campaign.id) }}" method="POST" style="display:inline;">
+                                        <input type="hidden" name="username" value="{{ influencer.username }}">
+                                        <input type="hidden" name="status" value="ACCEPTED">
+                                        <button type="submit" class="btn btn-success btn-block">Accept</button>
+                                    </form>
+                                    <!-- Form for Reject -->
+                                    <form action="{{ url_for('main.change_application_status', companycode=companycode, id=campaign.id) }}" method="POST" style="display:inline;">
+                                        <input type="hidden" name="username" value="{{ influencer.username }}">
+                                        <input type="hidden" name="status" value="REJECTED">
+                                        <button type="submit" class="btn btn-danger btn-block">Reject</button>
+                                    </form>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="5">No pending applications</td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        
+
+
+
+        <hr>
+        <br>
+        <div class="row">
+            <div class="col-md-10">
+                <h3>
+                    Accepted applicants
+                </h3>
+            </div>
+        </div>  
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">Serial No</th>
+                            <th scope="col">Influencer ID</th>
+                            <th scope="col">Influencer Name</th>
+                            <th scope="col">Influencer Reach</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if accepted_influencers %}
+                            {% for influencer in accepted_influencers %}
+                            <tr>
+                                <td>{{ loop.index }}</td>
+                                <td>
+                                    <img src="{{ url_for('static', filename='uploads/influencers/' + influencer.profilePic) }}"
+                                        alt="{{ influencer.username }}"
+                                        style="width: 50px; height: 50px;"> 
+                                    {{ influencer.username }}
+                                </td>
+                                <td>{{ influencer.Fname }} {{ influencer.Mname }} {{ influencer.Lname }}</td>
+                                <td>WIP</td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="5">No pending applications</td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -216,6 +216,7 @@ def influencer_update(username):
         return redirect(f'/influencer/{newusername}/profile')
     return redirect(f'/influencer/{username}/profile')
 
+#delete influencer profile
 @main_bp.route('/influencer/<username>/delete',methods=['GET','POST'])
 def influencer_delete(username):
     if request.method == 'POST':
@@ -244,7 +245,36 @@ def influencer_campaigns(username):
 @main_bp.route('/influencer/<username>/campaigns/<int:id>')
 def influencer_campaign_details(username, id):
     campaign = Campaigns.query.filter_by(id=id).first()
-    return render_template('campaign_details.html', campaign=campaign)
+    application = Applications.query.filter_by(influencer_id=username, campaign_id=id).first()
+    print(application)
+    if not application:
+        status = 'NA'
+    else:
+        status = application.status
+
+    return render_template('campaign_details.html',username=username, campaign=campaign, status=status)
+
+#apply from influencer
+@main_bp.route('/influencer/<username>/campaigns/<int:id>/apply')
+def apply_campaign(username, id):
+    influencer = Influencers.query.filter_by(username=username).first()
+    campaign = Campaigns.query.filter_by(id=id).first()
+    sponsor = Sponsors.query.filter_by(companycode=campaign.sponsor_id).first()
+    # create application
+    application = Applications.query.filter_by(influencer_id=username, campaign_id=id).first()
+    if not application:
+        print("creating application")
+        application = Applications(influencer_id=username, campaign_id=id, sponsor_id=campaign.sponsor_id, status='PENDING')
+        print(application)
+
+        campaign.totalApplications += 1
+        Campaigns.query.filter_by(id=id).update({'totalApplications': campaign.totalApplications})
+
+        db.session.add(application)
+        db.session.commit()
+    return redirect(f'/influencer/{username}/campaigns/{id}')
+
+
     
 
 #sponsor dashboard
@@ -359,3 +389,44 @@ def create_campaign(companycode):
     print(sponsor.companycode)
     return render_template('campaign_add.html', sponsor=sponsor, campaign=campaign)
 
+#view campaigns
+@main_bp.route('/sponsor/<companycode>/campaigns')
+def display_campaigns(companycode):
+    campaigns = Campaigns.query.filter_by(sponsor_id=companycode).all()
+    return render_template('sponsor_campaigns_list.html', companycode=companycode, campaigns=campaigns)
+
+#view campaign details
+@main_bp.route('/sponsor/<companycode>/campaigns/<int:id>')
+def display_campaign_details(companycode, id):
+    campaign = Campaigns.query.filter_by(id=id).first()
+    applications = Applications.query.filter_by(campaign_id=id, status="PENDING").all()
+    influencers = []
+    for application in applications:
+        influencer = Influencers.query.filter_by(username=application.influencer_id).first()
+        influencers.append(influencer)
+    
+
+    accepted_applications = Applications.query.filter_by(campaign_id=id, status="ACCEPTED").all()
+    accepted_influencers = []
+    for application in accepted_applications:
+        influencer = Influencers.query.filter_by(username=application.influencer_id).first()
+        accepted_influencers.append(influencer)
+
+    return render_template('sponsor_campaign_details.html',influencers=influencers, companycode=companycode, campaign=campaign, applications=applications, accepted_influencers=accepted_influencers)
+
+#status of application by Sponsor
+@main_bp.route('/sponsor/<companycode>/campaigns/<int:id>/status', methods=['POST'])
+def change_application_status(companycode, id):
+    influencer_id = request.form['username']
+    status = request.form['status']
+    #application = Applications.query.filter_by(influencer_id=influencer_id, campaign_id=id).first()
+    db.session.query(Applications).filter(Applications.influencer_id == influencer_id, Applications.campaign_id == id).update({
+        Applications.status: status
+    })
+    
+    campaign = Campaigns.query.filter_by(id=id).first()
+    campaign.totalApplications -= 1
+    Campaigns.query.filter_by(id=id).update({'totalApplications': campaign.totalApplications})
+
+    db.session.commit()
+    return redirect(f'/sponsor/{companycode}/campaigns/{id}')

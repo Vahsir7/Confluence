@@ -61,5 +61,16 @@ class Campaigns(db.Model):
     EndDate = db.Column(db.Date, nullable=False)
     contact_phone = db.Column(db.String(20), nullable=False)
     contact_email = db.Column(db.String(100), nullable=False)
+    totalApplications = db.Column(db.Integer, nullable=False, default=0)
 
-    #applications = db.relationship('Applications', backref='campaign', cascade="all, delete-orphan")
+    applications = db.relationship('Applications', backref='campaign', cascade="all, delete-orphan")
+
+class Applications(db.Model):
+    __tablename__ = 'applications'
+    
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    campaign_id = db.Column(db.Integer, db.ForeignKey('campaigns.id'), nullable=False)
+    influencer_id = db.Column(db.Integer, db.ForeignKey('influencers.username'), nullable=False)
+    sponsor_id = db.Column(db.Integer, db.ForeignKey('sponsors.companycode'), nullable=False)
+    status = db.Column(db.String(100), nullable=False)
+

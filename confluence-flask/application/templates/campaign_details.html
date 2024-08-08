@@ -23,7 +23,17 @@
                 <p class="card-text"><strong>End Date:</strong> {{ campaign.EndDate }}</p>
                 <p class="card-text"><strong>Contact Phone:</strong> {{ campaign.contact_phone }}</p>
                 <p class="card-text"><strong>Contact Email:</strong> {{ campaign.contact_email }}</p>
-                <a href="/apply/{{ campaign.id }}" class="btn btn-primary btn-block">Apply</a>
+                {% if status == "NA" %}
+                    <form action="/influencer/{{ username }}/campaigns/{{ campaign.id }}/apply" method="get">
+                        <button type="submit" class="btn btn-primary btn-block">Apply</button>
+                    </form>
+                {% elif status == "PENDING" %}
+                    <button type="button" class="btn btn-warning btn-block" disabled>Pending</button>
+                {% elif status == "ACCEPTED" %}
+                    <button type="button" class="btn btn-success btn-block" disabled>Accepted</button>
+                {% elif status == "REJECTED" %}
+                    <button type="button" class="btn btn-danger btn-block" disabled>Rejected</button>
+                {% endif %}
             </div>
         </div>
     </div>
