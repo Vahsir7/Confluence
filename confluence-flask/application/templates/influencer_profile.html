@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static',filename='light_basic.css') }}">
     <title>{{influencer.username}}</title>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
@@ -38,6 +39,7 @@
             <hr>
         {% endif %}
         <form id="profileForm" action="/influencer/{{influencer.username}}/update" method="POST" enctype="multipart/form-data">
+            
             <div class="row">
                 <div class="col-md-1">
                     <button type="button" id="updateBtn" class="btn btn-primary">Update</button>

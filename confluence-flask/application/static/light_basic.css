@@ -1,7 +1,7 @@
 html, body {
     height: 100%;
     margin: 0;
-    background-image: linear-gradient(rgb(144, 59, 224), rgb(163, 140, 185));
+    background-image: linear-gradient(rgba(144, 59, 224, 0.4), rgb(163, 140, 185,0.4));
     background-repeat: no-repeat;
     background-attachment: fixed;
     width: 100%;

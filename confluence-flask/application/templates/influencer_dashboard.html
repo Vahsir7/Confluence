@@ -9,13 +9,13 @@
 <body>
     <div class="container">
         <header>
-            <span>welcome {{ influencer.username }}</span>
-            <nav>
-                <a href ="{{ url_for('main.influencer_profile', username=influencer.username) }}">Profile</a>
-                <a href="{{url_for('main.influencer_campaigns', username=influencer.username)}}">Search</a>
-                <a href="#">Invitations</a>
-                <a href="#">Applications</a>
-                <a href="#">Logout</a>
+            <span>welcome <b style="font-size: 30px;">{{ influencer.Fname }}</b></span>
+            <nav >
+                <a class="nav-link" href ="{{ url_for('main.influencer_profile', username=influencer.username) }}">Profile</a>
+                <a class="nav-link" href="{{url_for('main.influencer_campaigns', username=influencer.username)}}">Search</a>
+                <a  href="#">Invitations</a>
+                <a  href="#">Applications</a>
+                <a  href="#">Logout</a>
             </nav>
         </header>
         <div class="content">
