@@ -27,6 +27,8 @@ and install the dependencies
 - flask
 - sqlalchemy
 - flask_sqlalchemy
+- flask-migrate
+- flask-login
 
 3. cd to `confluence-flask`
 4. run `python app.py` to start the server
@@ -49,7 +51,8 @@ and install the dependencies
 5. Add new campaigns from the `Add Campaign` option
 
 # WIP
-1. Accepting and rejecting sponsorships
-2. application management
-3. Mail system
-4. admin portal
+1. Mail system
+2. admin portal
+3. aesthetical changes
+4. add filters in search panel
+5. Additional features such as rating system
