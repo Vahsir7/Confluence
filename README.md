@@ -51,7 +51,8 @@ and install the dependencies
 5. Add new campaigns from the `Add Campaign` option
 
 # WIP
-1. Accepting and rejecting sponsorships
-2. application management
-3. Mail system
-4. admin portal
+1. Mail system
+2. admin portal
+3. aesthetical changes
+4. add filters in search panel
+5. Additional features such as rating system
