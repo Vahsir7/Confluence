@@ -27,6 +27,8 @@ and install the dependencies
 - flask
 - sqlalchemy
 - flask_sqlalchemy
+- flask-migrate
+- flask-login
 
 3. cd to `confluence-flask`
 4. run `python app.py` to start the server
