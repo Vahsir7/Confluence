@@ -12,7 +12,7 @@ def create_app():
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.sqlite3'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['UPLOAD_FOLDER'] = 'application/static/uploads'
-    app.config['SECRET_KEY'] = 'your_secret_key'  # Ensure you have a secret key for session management
+    app.config['SECRET_KEY'] = '1234'  
 
     db.init_app(app)
     migrate.init_app(app, db)
@@ -20,7 +20,7 @@ def create_app():
 
     # Import the models and routes to ensure they are registered
     with app.app_context():
-        from .models import Influencers, Sponsors, InfluencerAccounts
+        from .models import Influencers, Sponsors, InfluencerAccounts, Applications, Campaigns
         db.create_all()
 
     # Register the blueprints
@@ -31,10 +31,11 @@ def create_app():
 
     @login_manager.user_loader
     def load_user(user_id):
-        # Adjust this to suit how you differentiate between InfluencerAccounts and Sponsors
-        user = InfluencerAccounts.query.get(int(user_id))
-        if user is None:
-            user = Sponsors.query.get(int(user_id))
-        return user
+        user = InfluencerAccounts.query.get(user_id)
+        if user:
+            return user
+        return Sponsors.query.get(user_id)
+
+
 
     return app

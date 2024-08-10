@@ -1,10 +1,38 @@
 from flask import request, render_template, Blueprint, redirect, url_for, flash
+from flask_login import login_user, logout_user, login_required, current_user
 from .models import *
+from functools import wraps
 from . import db
 from datetime import datetime
 import os
 
 main_bp = Blueprint('main', __name__)
+
+
+
+def user_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        username = kwargs.get('username')
+        companycode = kwargs.get('companycode')
+
+        # Check if current_user is logged in
+        if not current_user.is_authenticated:
+            return redirect(url_for('main.signin'))
+
+        if isinstance(current_user, InfluencerAccounts):
+            if username and current_user.username != username:
+                return redirect(url_for('main.influencer_dashboard', username=current_user.username))
+        elif isinstance(current_user, Sponsors):
+            if companycode and current_user.companycode != companycode:
+                return redirect(url_for('main.sponsor_dashboard', companycode=current_user.companycode))
+        else:
+            return redirect('/')
+        return f(*args, **kwargs)
+    return decorated_function
+
+
+
 
 
 #landing home page
@@ -37,6 +65,7 @@ def login():
         if influencer:
             #print("rendering influencer dashboard")
             #influencer = Influencers.query.filter_by(id=influencer.influencer_id).first()
+            login_user(influencer)
             return redirect(f'/influencer/{influencer.username}')
         
         return render_template('signin.html', error='Invalid email or password')
@@ -46,11 +75,22 @@ def login():
         if not sponsor:
             sponsor = Sponsors.query.filter_by(companycode=email, password=password).first()
         if sponsor:
+            login_user(sponsor)
             return redirect(f'/sponsor/{sponsor.companycode}')
         return render_template('signin.html', error='Invalid email or password')
-    else:
+    elif logintype == 'admin':
         return render_template('Welcome admin')
-    
+    else:
+        return redirect('/')
+
+#logout
+@main_bp.route('/logout')
+@login_required
+@user_required
+def logout():
+    logout_user()
+    return redirect(url_for('main.signin'))
+
 
 #redirects to either signup_influencer or signup_sponsor
 @main_bp.route('/signup')
@@ -155,17 +195,23 @@ def signup_sponsor():
 
 # influencer dashboard
 @main_bp.route('/influencer/<username>')
+@login_required
+@user_required
 def influencer_dashboard(username):
     influencer = Influencers.query.filter_by(username=username).first()
     return render_template('influencer_dashboard.html', influencer=influencer)
 
 #infleuncer profile
 @main_bp.route('/influencer/<username>/profile')
+@login_required
+@user_required
 def influencer_profile(username):
     influencer = Influencers.query.filter_by(username=username).first()
     return render_template('influencer_profile.html', influencer=influencer)
 
 @main_bp.route('/influencer/<username>/update', methods=['POST'])
+@login_required
+@user_required
 def influencer_update(username):
     influencer = Influencers.query.filter_by(username=username).first()
     filename = influencer.profilePic
@@ -218,6 +264,8 @@ def influencer_update(username):
 
 #delete influencer profile
 @main_bp.route('/influencer/<username>/delete',methods=['GET','POST'])
+@login_required
+@user_required
 def influencer_delete(username):
     if request.method == 'POST':
         password = request.form['password']
@@ -236,6 +284,8 @@ def influencer_delete(username):
 
 #view campaigns
 @main_bp.route('/influencer/<username>/campaigns')
+@login_required
+@user_required
 def influencer_campaigns(username):
     campaigns = Campaigns.query.all()
     #print(len(campaigns))
@@ -243,6 +293,8 @@ def influencer_campaigns(username):
 
 #view campaign details
 @main_bp.route('/influencer/<username>/campaigns/<int:id>')
+@login_required
+@user_required
 def influencer_campaign_details(username, id):
     campaign = Campaigns.query.filter_by(id=id).first()
     application = Applications.query.filter_by(influencer_id=username, campaign_id=id).first()
@@ -256,6 +308,8 @@ def influencer_campaign_details(username, id):
 
 #apply from influencer
 @main_bp.route('/influencer/<username>/campaigns/<int:id>/apply')
+@login_required
+@user_required
 def apply_campaign(username, id):
     influencer = Influencers.query.filter_by(username=username).first()
     campaign = Campaigns.query.filter_by(id=id).first()
@@ -279,18 +333,24 @@ def apply_campaign(username, id):
 
 #sponsor dashboard
 @main_bp.route('/sponsor/<companycode>')
+@login_required
+@user_required
 def sponsor_dashboard(companycode):
     sponsor = Sponsors.query.filter_by(companycode=companycode).first()
     return render_template('sponsor_dashboard.html', sponsor=sponsor)
 
 #sponsor profile
 @main_bp.route('/sponsor/<companycode>/profile')
+@login_required
+@user_required
 def sponsor_profile(companycode):
     sponsor = Sponsors.query.filter_by(companycode=companycode).first()
     return render_template('sponsor_profile.html', sponsor=sponsor)
 
 #update sponsor profile
 @main_bp.route('/sponsor/<companycode>/update', methods=['POST'])
+@login_required
+@user_required
 def sponsor_update(companycode):
     sponsor = Sponsors.query.filter_by(companycode=companycode).first()
     filename = sponsor.companyLogo
@@ -335,6 +395,8 @@ def sponsor_update(companycode):
 
 #delete sponsor profile
 @main_bp.route('/sponsor/<companycode>/delete',methods=['GET','POST'])
+@login_required
+@user_required
 def sponsor_delete(companycode):
     if request.method == 'POST':
         password = request.form['password']
@@ -350,6 +412,8 @@ def sponsor_delete(companycode):
 
 # add campaign
 @main_bp.route('/sponsor/<companycode>/campaign/create', methods=['POST','GET'])
+@login_required
+@user_required
 def create_campaign(companycode):
 
     sponsor = Sponsors.query.filter_by(companycode=companycode).first()
@@ -391,12 +455,16 @@ def create_campaign(companycode):
 
 #view campaigns
 @main_bp.route('/sponsor/<companycode>/campaigns')
+@login_required
+@user_required
 def display_campaigns(companycode):
     campaigns = Campaigns.query.filter_by(sponsor_id=companycode).all()
     return render_template('sponsor_campaigns_list.html', companycode=companycode, campaigns=campaigns)
 
 #view campaign details
 @main_bp.route('/sponsor/<companycode>/campaigns/<int:id>')
+@login_required
+@user_required
 def display_campaign_details(companycode, id):
     campaign = Campaigns.query.filter_by(id=id).first()
     applications = Applications.query.filter_by(campaign_id=id, status="PENDING").all()
@@ -416,6 +484,8 @@ def display_campaign_details(companycode, id):
 
 #status of application by Sponsor
 @main_bp.route('/sponsor/<companycode>/campaigns/<int:id>/status', methods=['POST'])
+@login_required
+@user_required
 def change_application_status(companycode, id):
     influencer_id = request.form['username']
     status = request.form['status']
@@ -430,3 +500,4 @@ def change_application_status(companycode, id):
 
     db.session.commit()
     return redirect(f'/sponsor/{companycode}/campaigns/{id}')
+

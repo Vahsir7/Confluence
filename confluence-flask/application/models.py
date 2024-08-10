@@ -1,5 +1,6 @@
 from . import db
-class Influencers(db.Model):
+from flask_login import UserMixin
+class Influencers(UserMixin, db.Model):
     __tablename__ = 'influencers'
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -17,7 +18,7 @@ class Influencers(db.Model):
     # Define backref here
     accounts = db.relationship('InfluencerAccounts', backref='influencer', cascade="all, delete-orphan")
 
-class InfluencerAccounts(db.Model):
+class InfluencerAccounts(UserMixin, db.Model):
     __tablename__ = 'Influencer_accounts'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     influencer_id = db.Column(db.Integer, db.ForeignKey('influencers.id'), nullable=False)
@@ -26,7 +27,7 @@ class InfluencerAccounts(db.Model):
     password = db.Column(db.String(100), nullable=False)
     # Do not define backref here
     
-class Sponsors(db.Model):
+class Sponsors(UserMixin, db.Model):
     __tablename__ = 'sponsors'
     
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -44,7 +45,7 @@ class Sponsors(db.Model):
     campaigns = db.relationship('Campaigns', backref='sponsor', cascade="all, delete-orphan")
 
 
-class Campaigns(db.Model):
+class Campaigns(UserMixin, db.Model):
     __tablename__ = 'campaigns'
     
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -65,7 +66,7 @@ class Campaigns(db.Model):
 
     applications = db.relationship('Applications', backref='campaign', cascade="all, delete-orphan")
 
-class Applications(db.Model):
+class Applications(UserMixin, db.Model):
     __tablename__ = 'applications'
     
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
