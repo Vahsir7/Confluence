@@ -209,7 +209,7 @@ def influencer_dashboard(username):
         campaign = Campaigns.query.filter_by(id=application.campaign_id).first()
         campaigns.append(campaign)
         statuses.append(application.status)
-    return render_template('influencer_dashboard.html', influencer=influencer, campaigns=campaigns, status=statuses)
+    return render_template('influencer_dashboard.html', username=username, influencer=influencer, campaigns=campaigns, status=statuses)
 
 #infleuncer profile
 @main_bp.route('/influencer/<username>/profile')

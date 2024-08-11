@@ -48,12 +48,18 @@
                             <tbody>
                                 {% for campaign in campaigns %}
                                 <tr>
-                                    <td>{{ campaign.Title }}</td>
+                                    <td><a href="/influencer/{{ username }}/campaigns/{{ campaign.id }}">{{ campaign.Title }}</a></td>
                                     <td>{{ campaign.companyName }}</td>
                                     <td>{{ campaign.StartDate }}</td>
                                     <td>{{ campaign.EndDate }}</td>
                                     <td>{{ campaign.Salary }}</td>
-                                    <td>{{ status[loop.index0] }}</td> 
+                                    {% if status[loop.index0] == 'PENDING' %}
+                                    <td><span style="background-color: hsla(60, 100%, 50%, 0.5); color: rgb(0, 0, 0);"><b>{{ status[loop.index0] }}</b></span></td>
+                                    {% elif status[loop.index0] == 'ACCEPTED' %}
+                                    <td><span style="background-color: hsla(120, 100%, 50%, 0.5); color: rgb(0, 0, 0);"><b>{{ status[loop.index0] }}</b></span></td>
+                                    {% else %}
+                                    <td><span style="background-color: hsla(0, 100%, 50%, 0.5); color: rgb(0, 0, 0);"><b>{{ status[loop.index0] }}</b></span></td>
+                                    {% endif %}
                                 </tr>
                                 {% endfor %}
                             </tbody>
