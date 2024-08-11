@@ -1,9 +1,14 @@
+----> https://vahsir.pythonanywhere.com/
+
 # Confluence
 Influencer Engagement and Sponsorship Coordination Platform. 
 
 This is a web application that connects influencers and sponsors. Influencers can register and login to view all the campaigns and sponsors can register and login to add new campaigns.
 The influencers will receive payment after each campaign is completed.
 There will be a admin portal that can manage all the campaigns and users.
+
+# Deployed version
+https://vahsir.pythonanywhere.com/
 
 # Tech Stack
 1. Flask
