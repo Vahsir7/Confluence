@@ -18,20 +18,19 @@ There will be a admin portal that can manage all the campaigns and users.
 # Steps of installation
 
 1. Fork the repository and then clone the repository in your local machine
-2. go to `/confluence-venv/bin/` and run `activate` to activate the virtual environment
-
-if any error occurs then run the following command
-create a virtual environment
-and install the dependencies
+2. create a virtual environment and install the dependencies using the following command
+```bash 
+pip install -r requirements.txt
+```
+The following dependencies will be installed
 - flask
 - sqlalchemy
 - flask_sqlalchemy
 - flask-migrate
 - flask-login
 
-3. cd to `confluence-flask`
-4. run `python app.py` to start the server
-5. open the browser and go to `http://http://127.0.0.1:5000/`
+3. run `python app.py` to start the server
+4. open the browser and go to `http://http://127.0.0.1:5000/`
 
 # Features
 
