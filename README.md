@@ -20,7 +20,9 @@ There will be a admin portal that can manage all the campaigns and users.
 1. Fork the repository and then clone the repository in your local machine
 2. create a virtual environment and install the dependencies using the following command
 ```bash 
+python 3.10 virtualenv venv
 pip install -r requirements.txt
+pip freeze #to check if all the dependencies are installed
 ```
 The following dependencies will be installed
 - flask
