@@ -67,16 +67,17 @@
                 <div class="col-md-4">
                     <label for="industry" class="form-label">Industry*</label><br>
                     <select class="form-select" id="industry" name="industry">
-                        <option value="shoes" {% if industry == 'Shoes' %}selected{% endif %}>Shoe</option>
-                        <option value="clothing" {% if industry == 'Clothing' %}selected{% endif %}>Clothing</option>
-                        <option value="electronics" {% if industry == 'Electronics' %}selected{% endif %}>Electronics</option>
-                        <option value="food" {% if industry == 'Food' %}selected{% endif %}>Food</option>
-                        <option value="beauty" {% if industry == 'Beauty' %}selected{% endif %}>Beauty</option>
-                        <option value="health" {% if industry == 'Health' %}selected{% endif %}>Health</option>
-                        <option value="fitness" {% if industry == 'Fitness' %}selected{% endif %}>Fitness</option>
-                        <option value="entertainment" {% if industry == 'Entertainment' %}selected{% endif %}>Entertainment</option>
-                        <option value="other" {% if industry == 'Other' %}selected{% endif %}>Other</option>
-
+                        <option value="shoes" {% if industry == 'shoes' %}selected{% endif %}>Shoe</option>
+                        <option value="clothing" {% if industry == 'clothing' %}selected{% endif %}>Clothing</option>
+                        <option value="electronics" {% if industry == 'electronics' %}selected{% endif %}>Electronics</option>
+                        <option value="food" {% if industry == 'food' %}selected{% endif %}>Food</option>
+                        <option value="beauty" {% if industry == 'beauty' %}selected{% endif %}>Beauty</option>
+                        <option value="health" {% if industry == 'health' %}selected{% endif %}>Health</option>
+                        <option value="technology" {% if industry == 'technology' %}selected{% endif %}>Technology</option>
+                        <option value="fitness" {% if industry == 'fitness' %}selected{% endif %}>Fitness</option>
+                        <option value="entertainment" {% if industry == 'entertainment' %}selected{% endif %}>Entertainment</option>
+                        <option value="other" {% if industry == 'other' %}selected{% endif %}>Other</option>
+                        
                     </select>
                 </div>
             </div>

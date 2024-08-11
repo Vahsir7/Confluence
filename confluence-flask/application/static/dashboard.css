@@ -89,7 +89,7 @@ main {
 /* Fixed sizes for panels */
 .section {
     height: 150px;
-    overflow: hidden;
+    overflow: scroll;
     position: relative;
 }
 

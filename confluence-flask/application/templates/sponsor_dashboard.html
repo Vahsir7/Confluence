@@ -28,20 +28,48 @@
                     <p style="color:#333;">@{{sponsor.companycode}}</p>
                     <p style="font-size: 16px;">{{sponsor.name}}</p>
                     <p>{{sponsor.industry}}</p>
-                    <p>earnings</p>
-                    <p>ratings</p>
                 </div>
             </aside>
             <main>
+
                 <section class="panel section">
                     <h2>Campaigns</h2>
-                    <p>There are no Campaigns to show</p>
                     <a href="/sponsor/{{sponsor.companycode}}/campaign/create" class="btn">+Add Campaigns</a>
+                    <hr style=" color: hsla(0, 0%, 0%, 0);">
+                    {% if campaigns %}
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Title</th>
+                                    <th>Start Date</th>
+                                    <th>End Date</th>
+                                    <th>Salary</th>
+                                    <th>Applications</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for campaign in campaigns %}
+                                <tr>
+                                    <td><a href="/sponsor/{{sponsor.companycode}}/campaigns/{{campaign.id}}">{{ campaign.Title }}</a></td>
+                                    <td>{{ campaign.StartDate }}</td>
+                                    <td>{{ campaign.EndDate }}</td>
+                                    <td>{{ campaign.Salary }}</td>
+                                    <td>{{ campaign.totalApplications }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    {% else %}
+                    <p>There are no Campaigns to show</p>
+                    {% endif %}
+                    
                 </section>
+                
                 <section class="panel section">
                     <h2>Mail</h2>
                     <p>There are no messages to show</p>
                 </section>
+
             </main>
         </div>
     </div>

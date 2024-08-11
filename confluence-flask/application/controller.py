@@ -11,20 +11,28 @@ main_bp = Blueprint('main', __name__)
 
 def user_required(f):
     @wraps(f)
+    
     def decorated_function(*args, **kwargs):
-        print(current_user)
-        print("args",args)
-        print("kwargs",kwargs)
+
+        if request.endpoint == 'main.logout':
+            return f(*args, **kwargs)
+
+        #print(current_user)
+        #print("args",args)
+        #print("kwargs",kwargs)
         username = kwargs.get('username')
         companycode = kwargs.get('companycode')
-        print(f"username : {username} and companycode : {companycode}")
+        #print(f"username : {username} and companycode : {companycode}")
         # Check if current_user is logged in
         if not current_user.is_authenticated:
             return redirect(url_for('main.signin'))
+        
         logintype = session.get('logintype')
+        
         if (logintype=="influencer" and not username) or (logintype=="sponsor" and not companycode):
             abort(403)
-        print("login type",logintype)
+        #print("login type",logintype)
+        
         user_id = session.get('user_id')
         if logintype == "sponsor":
             if companycode and current_user.companycode != companycode:
@@ -34,7 +42,9 @@ def user_required(f):
                 return redirect(url_for('main.influencer_dashboard', username=current_user.username))
         else:
             return redirect('/')
+        
         return f(*args, **kwargs)
+    
     return decorated_function
 
 #landing home page
@@ -347,7 +357,9 @@ def apply_campaign(username, id):
 @user_required
 def sponsor_dashboard(companycode):
     sponsor = Sponsors.query.filter_by(companycode=companycode).first()
-    return render_template('sponsor_dashboard.html', sponsor=sponsor)
+    campaigns = Campaigns.query.filter_by(sponsor_id=sponsor.companycode).all()
+    print(campaigns)
+    return render_template('sponsor_dashboard.html', sponsor=sponsor, campaigns=campaigns)
 
 #sponsor profile
 @main_bp.route('/sponsor/<companycode>/profile')
