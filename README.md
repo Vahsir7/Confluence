@@ -14,7 +14,6 @@ There will be a admin portal that can manage all the campaigns and users.
 6. Bootstrap
 7. Javascript (only for some visual effects)
 
-`Demo practice` is the folder that i have done my flask learning work, i will implement all my knowledge from that concepts and polish them to make a full fledged application.
 
 # Steps of installation
 
