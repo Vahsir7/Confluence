@@ -10,12 +10,11 @@
     <div class="container">
         <header>
             <span>welcome <b style="font-size: 30px;">{{ influencer.Fname }}</b></span>
-            <nav >
-                <a class="nav-link" href ="{{ url_for('main.influencer_profile', username=influencer.username) }}">Profile</a>
-                <a class="nav-link" href="{{url_for('main.influencer_campaigns', username=influencer.username)}}">Search</a>
-                <a  href="#">Invitations</a>
-                <a  href="#">Applications</a>
-                <a  href="/logout">Logout</a>
+            <nav>
+                <a class="nav-link" href="{{ url_for('main.influencer_profile', username=influencer.username) }}">Profile</a>
+                <a class="nav-link" href="{{ url_for('main.influencer_campaigns', username=influencer.username) }}">Search</a>
+                <a href="#">Applications</a>
+                <a class="nav-link" href="/logout">Logout</a>
             </nav>
         </header>
         <div class="content">
@@ -25,8 +24,8 @@
                 </div>
                 <div class="profile-details">
                     <hr>
-                    <p style="color:#333;">@{{influencer.username}}</p>
-                    <p style="font-size: 16px;">{{influencer.Fname}} {{influencer.Lname}}</p>
+                    <p style="color:#333;">@{{ influencer.username }}</p>
+                    <p style="font-size: 16px;">{{ influencer.Fname }} {{ influencer.Lname }}</p>
                     <p>earnings</p>
                     <p>ratings</p>
                 </div>
@@ -34,15 +33,38 @@
             <main>
                 <section class="panel section">
                     <h2>Applications</h2>
-                    <p>There are no applications to show</p>
+                    {% if campaigns %}
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Title</th>
+                                    <th>Brand</th>
+                                    <th>Start Date</th>
+                                    <th>End Date</th>
+                                    <th>Salary</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for campaign in campaigns %}
+                                <tr>
+                                    <td>{{ campaign.Title }}</td>
+                                    <td>{{ campaign.companyName }}</td>
+                                    <td>{{ campaign.StartDate }}</td>
+                                    <td>{{ campaign.EndDate }}</td>
+                                    <td>{{ campaign.Salary }}</td>
+                                    <td>{{ status[loop.index0] }}</td> 
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    {% else %}
+                        <p>There are no applications to show</p>
+                    {% endif %}
                 </section>
                 <section class="panel section">
-                    <h2>Invitations</h2>
+                    <h2>Mail</h2>
                     <p>There are no invitations to show</p>
-                </section>
-                <section class="panel section">
-                    <h2>New Opportunities</h2>
-                    <p>There are no new opportunities to show</p>
                 </section>
             </main>
         </div>

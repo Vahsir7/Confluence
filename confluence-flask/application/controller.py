@@ -1,4 +1,4 @@
-from flask import request, render_template, Blueprint, redirect, url_for, flash
+from flask import request, render_template, Blueprint, redirect, url_for, flash, session, abort
 from flask_login import login_user, logout_user, login_required, current_user
 from .models import *
 from functools import wraps
@@ -9,31 +9,33 @@ import os
 main_bp = Blueprint('main', __name__)
 
 
-
 def user_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
+        print(current_user)
+        print("args",args)
+        print("kwargs",kwargs)
         username = kwargs.get('username')
         companycode = kwargs.get('companycode')
-
+        print(f"username : {username} and companycode : {companycode}")
         # Check if current_user is logged in
         if not current_user.is_authenticated:
             return redirect(url_for('main.signin'))
-
-        if isinstance(current_user, InfluencerAccounts):
-            if username and current_user.username != username:
-                return redirect(url_for('main.influencer_dashboard', username=current_user.username))
-        elif isinstance(current_user, Sponsors):
+        logintype = session.get('logintype')
+        if (logintype=="influencer" and not username) or (logintype=="sponsor" and not companycode):
+            abort(403)
+        print("login type",logintype)
+        user_id = session.get('user_id')
+        if logintype == "sponsor":
             if companycode and current_user.companycode != companycode:
                 return redirect(url_for('main.sponsor_dashboard', companycode=current_user.companycode))
+        elif logintype == "influencer":
+            if username and current_user.username != username:
+                return redirect(url_for('main.influencer_dashboard', username=current_user.username))
         else:
             return redirect('/')
         return f(*args, **kwargs)
     return decorated_function
-
-
-
-
 
 #landing home page
 @main_bp.route('/')
@@ -44,7 +46,6 @@ def signin():
     return render_template('signin.html')
     #return redirect('/login')
 
-
 #login page 
 #give details and enter
 #checks from influencerAccounts db
@@ -53,21 +54,14 @@ def login():
     email = request.args.get('email')
     password = request.args.get('password')
     logintype = request.args.get('type')
-    
+    session['logintype'] = logintype
     if logintype == 'influencer':
-        if '@' in email:
-            influencer = InfluencerAccounts.query.filter_by(email=email, password=password).first()
-        else:
+        influencer = InfluencerAccounts.query.filter_by(email=email, password=password).first()
+        if not influencer:
             influencer = InfluencerAccounts.query.filter_by(username=email, password=password).first()
-        #print("*************************")
-        #print(email,password,type)
-        #print(influencer)
         if influencer:
-            #print("rendering influencer dashboard")
-            #influencer = Influencers.query.filter_by(id=influencer.influencer_id).first()
             login_user(influencer)
             return redirect(f'/influencer/{influencer.username}')
-        
         return render_template('signin.html', error='Invalid email or password')
     
     elif logintype == 'sponsor':
@@ -88,6 +82,7 @@ def login():
 @login_required
 @user_required
 def logout():
+    print("logging out")
     logout_user()
     return redirect(url_for('main.signin'))
 
@@ -130,7 +125,8 @@ def signup_influencer():
         if profilePic.filename != '':
             filename = username
             filename += '.jpg'
-            profilePic.save(os.path.join(os.path.abspath(os.path.dirname(__file__)), 'static/uploads/influencers', filename))
+            profilePic.save(os.path.join(os.path.abspath(os.path.dirname(__file__)), 
+                                         'static/uploads/influencers', filename))
         else:
             if gender == 'male':
                 filename = 'male.jpg'
@@ -139,8 +135,14 @@ def signup_influencer():
             else:
                 filename = 'neutral.jpg'
 
-        influencer = Influencers(Fname=Fname,Mname=Mname,Lname=Lname,username=username,gender=gender,phone=phone,address=address,email=email,socialmedia=socialmedia,password=password,profilePic=filename)
-        account = InfluencerAccounts(email=email,username=username,password=password,influencer=influencer)
+        influencer = Influencers(Fname=Fname,Mname=Mname,Lname=Lname,
+                                 username=username,gender=gender,phone=phone,address=address,
+                                 email=email,socialmedia=socialmedia,password=password,
+                                 profilePic=filename)
+        
+        account = InfluencerAccounts(email=email,username=username,
+                                     password=password,influencer=influencer)
+        
         db.session.add(account)
         db.session.add(influencer)
         db.session.commit()
@@ -148,6 +150,7 @@ def signup_influencer():
         return render_template('signin.html')
     return render_template('signup_influencer.html')
 
+#signup page for sponsor
 @main_bp.route('/signup/sponsor',methods=['POST','GET'])
 def signup_sponsor():
     if request.method == 'POST':
@@ -199,7 +202,14 @@ def signup_sponsor():
 @user_required
 def influencer_dashboard(username):
     influencer = Influencers.query.filter_by(username=username).first()
-    return render_template('influencer_dashboard.html', influencer=influencer)
+    applications = Applications.query.filter_by(influencer_id=username).all()
+    campaigns = []
+    statuses = []
+    for application in applications:
+        campaign = Campaigns.query.filter_by(id=application.campaign_id).first()
+        campaigns.append(campaign)
+        statuses.append(application.status)
+    return render_template('influencer_dashboard.html', influencer=influencer, campaigns=campaigns, status=statuses)
 
 #infleuncer profile
 @main_bp.route('/influencer/<username>/profile')

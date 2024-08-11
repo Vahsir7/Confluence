@@ -173,3 +173,18 @@ nav a.nav-link:hover {
     outline: none;
     box-shadow: 0 0 0 0.2rem rgba(38, 143, 255, 0.5); /* Focus shadow */
 }
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0 auto;
+}
+
+table tr:nth-child(even) {
+    background-color: #f2f2f23d; /* Light gray for even rows */
+}
+
+table th, table td {
+    text-align: left;
+    border-bottom: 1px solid #ddd; 
+}

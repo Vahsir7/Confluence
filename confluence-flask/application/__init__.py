@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, session
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager
@@ -31,11 +31,16 @@ def create_app():
 
     @login_manager.user_loader
     def load_user(user_id):
-        user = InfluencerAccounts.query.get(user_id)
-        if user:
-            return user
-        return Sponsors.query.get(user_id)
-
-
-
+        logintype = session.get('logintype')
+        print(f'logintype: {logintype}')
+        print(f'user_id: {user_id}')
+        if logintype is not None:
+            if logintype == 'sponsor':
+                user = Sponsors.query.get(int(user_id))
+                print(f'sponsor')
+                return user
+            elif logintype == 'influencer':
+                print(f'influencer')
+                user = InfluencerAccounts.query.get(int(user_id))
+                return user
     return app
