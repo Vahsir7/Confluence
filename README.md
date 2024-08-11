@@ -29,7 +29,11 @@ The following dependencies will be installed
 - flask-migrate
 - flask-login
 
-3. run `python app.py` to start the server
+3. run this command to to start the server
+```bash
+python app.py
+``` 
+
 4. open the browser and go to `http://http://127.0.0.1:5000/`
 
 # Features
