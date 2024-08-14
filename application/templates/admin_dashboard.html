@@ -14,7 +14,7 @@
         <div>
             <h2>Total Influencers</h2>
             <p>{{ total_influencers }}</p>
-            <a href="#">View All</a>
+            <a href="{{ url_for('main.display_influencers', username=username )}}">View All</a>
         </div>
         
         <div>

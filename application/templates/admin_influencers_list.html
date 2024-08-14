@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Influencer List</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='light_basic.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="jumbotron-fluid">
+            <h1 class="display-4">Influencer List</h1>
+            <hr>
+        </div>
+        <div class="row">
+            <div class="col-md-1">
+                <a href="/influencer/{{ username }}" class="btn btn-primary">Home</a>
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">Username</th>
+                            <th scope="col">First Name</th>
+                            <th scope="col">Last Name</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Phone</th>
+                            <th scope="col">Profile Picture</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for influencer in influencers %}
+                            <tr>
+                                <td>{{ influencer.id }}</td>
+                                <td>{{ influencer.username }}</td>
+                                <td>{{ influencer.Fname }}</td>
+                                <td>{{ influencer.Lname }}</td>
+                                <td>{{ influencer.email }}</td>
+                                <td>{{ influencer.phone }}</td>
+                                <td>
+                                    {% if influencer.profilePic %}
+                                        <img src="{{ url_for('static', filename='uploads/influencers/' + influencer.profilePic) }}"
+                                        alt="{{ influencer.username }}'s profile picture"
+                                        style="width: 50px; height: 50px;">
+                                    {% else %}
+                                        No Image
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
