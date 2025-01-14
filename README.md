@@ -1,4 +1,4 @@
-----> <a href="https://vahsir.pythonanywhere.com/">Confluence</a>
+----> <a href="https://confluence-9hawu2j9e-vahsir7s-projects.vercel.app/">Confluence</a>
 
 # Confluence
 Influencer Engagement and Sponsorship Coordination Platform. 
@@ -8,7 +8,7 @@ The influencers will receive payment after each campaign is completed.
 There will be a admin portal that can manage all the campaigns and users.
 
 # Deployed version
-<a href="https://vahsir.pythonanywhere.com/">https://vahsir.pythonanywhere.com/</a>
+<a href="https://confluence-9hawu2j9e-vahsir7s-projects.vercel.app/">Confluence app link</a>
 
 # Tech Stack
 1. Flask
